@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Card.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Field.gd" type="Script" id=2]
+[ext_resource path="res://card_empty.png" type="Texture" id=3]
+
+[node name="Field" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Card" parent="." instance=ExtResource( 1 )]
+position = Vector2( 418.325, 196.218 )
+
+[node name="Card2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 333.843, 197.58 )
+
+[node name="Sprite" parent="Card2" index="0"]
+texture = ExtResource( 3 )
+
+[editable path="Card2"]
