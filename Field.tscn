@@ -4,7 +4,33 @@
 [ext_resource path="res://Field.gd" type="Script" id=2]
 [ext_resource path="res://card_empty.png" type="Texture" id=3]
 [ext_resource path="res://icon.png" type="Texture" id=4]
-[ext_resource path="res://PairZone.gd" type="Script" id=5]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Area2D
+
+# the single card waiting to be paired
+var card_to_be_paired = null
+
+func _ready():
+	pass
+
+func _process(delta):
+	pass
+
+# TODO move this code to the Card signal.
+func _on_PairZone_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton:
+		# we're dropping a card onto the pair zone.
+		if not event.is_pressed() and get_parent().selected_card:
+			if card_to_be_paired:
+				print(\"pairing \" + get_parent().selected_card.name  + \" with \" + card_to_be_paired.name)
+				# TODO delete paired cards
+				# card_to_be_paired = null
+			else:
+				print(\"adding \" + get_parent().selected_card.name)
+				card_to_be_paired = get_parent().selected_card
+				print(card_to_be_paired.name + ' on deck')
+"
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 128.864, 73.4201 )
@@ -23,7 +49,7 @@ texture = ExtResource( 3 )
 
 [node name="PairZone" type="Area2D" parent="."]
 position = Vector2( 862.695, 216.292 )
-script = ExtResource( 5 )
+script = SubResource( 2 )
 __meta__ = {
 "_edit_group_": true
 }
