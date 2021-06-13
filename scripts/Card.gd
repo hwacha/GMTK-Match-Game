@@ -1,8 +1,65 @@
 extends Area2D
 
-# Called when the node enters the scene tree for the first time.
+var stats = {
+	'left': [1, -1, -1],
+	'right': [-1, 1, 1],
+	'up': [1, 0, 0],
+	'down': [-1, 0, 0],
+}
+
+var offsets = {
+	'left': {
+		'neu' : Vector2(40, 26),
+		'pos' : Vector2(47, 26)
+	},
+	'up': {
+		'neu' : Vector2(26, -72),
+		'pos' : Vector2(26, -79),
+	},
+	'right': {
+		'neu' : Vector2(-40, 26),
+		'pos' : Vector2(-47, 26)
+	},
+	'down': {
+		'neu' : Vector2(26, 72),
+		'pos' : Vector2(26, 79),
+	},
+}
+
+var rotations = {
+	'left': 180,
+	'right': 0,
+	'up': 90,
+	'down': -90
+}
+
+
+
+onready var interjambs = get_node("Interjambs")
 func _ready():
-	pass
+
+	var neujamb_prefab = load("res://prefabs/NeuJamb.tscn")
+	var posjamb_prefab = load("res://prefabs/PosJamb.tscn")
+	for dir in ['left', 'right', 'up', 'down']:
+		for i in range(0, len(stats[dir])):
+			var jamb = null
+			var offset = null
+			if stats[dir][i] == 0:
+				jamb = neujamb_prefab.instance()
+				offset = offsets[dir]['neu']
+			if stats[dir][i] == 1:
+				jamb = posjamb_prefab.instance()
+				offset = offsets[dir]['pos']
+			if stats[dir][i] in [0, 1]:
+				jamb.rotation_degrees = rotations[dir]
+				if dir in ['left', 'right']:
+					jamb.transform.origin.x = offset.x
+					jamb.transform.origin.y = offset.y - offset.y * i
+				else:
+					jamb.transform.origin.x = offset.x - offset.x * i
+					jamb.transform.origin.y = offset.y
+				jamb.z_index = 1
+				self.interjambs.add_child(jamb)
 
 func _process(delta):
 	if(get_parent().selected_card == self):
@@ -26,12 +83,12 @@ func _on_Card_input_event(viewport, event, shape_idx):
 		if event.is_pressed():
 			if z_index == local_max_z:
 				get_parent().selected_card = self
-				z_index = get_parent().max_z + 1
+				z_index = get_parent().max_z + 2
 
 		else: # released
 			if get_parent().selected_card == self:
 				if z_index < local_max_z:
-					z_index = local_max_z + 1
+					z_index = local_max_z + 2
 				get_parent().max_z = max(z_index, get_parent().max_z)
 				
 				if in_pairzone:
