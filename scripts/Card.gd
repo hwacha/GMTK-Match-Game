@@ -83,40 +83,41 @@ func _process(delta):
 			set_position(get_viewport().get_mouse_position())
 		else:
 			pass
-	if Input.is_action_just_pressed("ui_down") and pair_state == 'pair_container':
-		unpair()
 
 # TODO move pair zone code to here.
 func _on_Card_input_event(viewport, event, shape_idx):
 
 	if event is InputEventMouseButton: # mouse has happened in the frame
-		
-		var overlapping =  get_overlapping_areas()
-		var point = event.position
-		var local_max_z = z_index
-		var in_pairzone = false
-		for area in overlapping:
-			if area.name == "PairZone":
-				in_pairzone = true
-			if area.get_script() == get_script() and area.z_index > local_max_z and area.is_colliding(point):
-				local_max_z = area.z_index
-		
-		if event.is_pressed():
-			if z_index == local_max_z:
-				field.selected_card = self
-				z_index = field.max_z + 2
+		if event.button_index == BUTTON_LEFT:
+			var overlapping =  get_overlapping_areas()
+			var point = event.position
+			var local_max_z = z_index
+			var in_pairzone = false
+			for area in overlapping:
+				if area.name == "PairZone":
+					in_pairzone = true
+				if area.get_script() == get_script() and area.z_index > local_max_z and area.is_colliding(point):
+					local_max_z = area.z_index
+			
+			if event.is_pressed():
+				if z_index == local_max_z:
+					field.selected_card = self
+					z_index = field.max_z + 2
 
-		else: # released
-			if field.selected_card == self:
-				if z_index < local_max_z:
-					z_index = local_max_z + 2
-				field.max_z = max(z_index, field.max_z)
-				
-				if pair_state == 'pair_container' and in_pairzone:
-					complete_pair()
-				if pair_state == 'unpaired' and target_pair['card'] != null:
-					attempt_pair_with_target()
-				field.selected_card = null
+			else: # released
+				if field.selected_card == self:
+					if z_index < local_max_z:
+						z_index = local_max_z + 2
+					field.max_z = max(z_index, field.max_z)
+					
+					if pair_state == 'pair_container' and in_pairzone:
+						complete_pair()
+					if pair_state == 'unpaired' and target_pair['card'] != null:
+						attempt_pair_with_target()
+					field.selected_card = null
+		if event.button_index == BUTTON_RIGHT:
+			if event.is_pressed() and pair_state == 'pair_container':
+				unpair()
 
 func is_colliding(point):
 	var rect = get_node('Full').get_shape()
