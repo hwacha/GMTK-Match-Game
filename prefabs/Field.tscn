@@ -43,6 +43,12 @@ position = Vector2( 612.296, 373.124 )
 [node name="Card2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 333.843, 197.58 )
 
+[node name="CanvasModulate" parent="Card2" index="5"]
+visible = false
+
+[node name="RichTextLabel" parent="Card2" index="6"]
+text = "James"
+
 [node name="PairZone" type="Area2D" parent="."]
 position = Vector2( 862.695, 216.292 )
 script = SubResource( 1 )

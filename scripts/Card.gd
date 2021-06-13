@@ -1,10 +1,10 @@
 extends Area2D
 
 var stats = {
-	'left': [1, -1, -1],
-	'right': [-1, 1, 1],
-	'up': [1, 0, 0],
-	'down': [-1, 0, 0],
+	'left': [0, 0, 0],
+	'right': [0, 0, 0],
+	'up': [0, 0, 0],
+	'down': [0, 0, 0],
 }
 
 var offsets = {
@@ -33,11 +33,26 @@ var rotations = {
 	'down': -90
 }
 
+var target_pair = {
+	'card': null,
+	'dir': 'up',
+}
 
+var dir_map = ['up', 'right', 'left', 'down']
+
+var dir_pairs = {
+	'left' : 'right',
+	'right': 'left',
+	'up': 'down',
+	'down': 'up',
+}
+
+var paired = false
 
 onready var interjambs = get_node("Interjambs")
-func _ready():
+onready var field = get_tree().get_root().get_node('Field')
 
+func _ready():
 	var neujamb_prefab = load("res://prefabs/NeuJamb.tscn")
 	var posjamb_prefab = load("res://prefabs/PosJamb.tscn")
 	for dir in ['left', 'right', 'up', 'down']:
@@ -62,8 +77,11 @@ func _ready():
 				self.interjambs.add_child(jamb)
 
 func _process(delta):
-	if(get_parent().selected_card == self):
-		set_position(get_viewport().get_mouse_position())
+	if (field.selected_card == self):
+		if paired:
+			get_parent().set_position(get_viewport().get_mouse_position())
+		else:
+			set_position(get_viewport().get_mouse_position())
 
 # TODO move pair zone code to here.
 func _on_Card_input_event(viewport, event, shape_idx):
@@ -82,28 +100,30 @@ func _on_Card_input_event(viewport, event, shape_idx):
 		
 		if event.is_pressed():
 			if z_index == local_max_z:
-				get_parent().selected_card = self
-				z_index = get_parent().max_z + 2
+				field.selected_card = self
+				z_index = field.max_z + 2
 
 		else: # released
-			if get_parent().selected_card == self:
+			if field.selected_card == self:
 				if z_index < local_max_z:
 					z_index = local_max_z + 2
-				get_parent().max_z = max(z_index, get_parent().max_z)
+				field.max_z = max(z_index, field.max_z)
 				
 				if in_pairzone:
-					var card_to_be_paired = get_parent().get_node("PairZone").card_to_be_paired
+					var card_to_be_paired = field.get_node("PairZone").card_to_be_paired
 					
 					if card_to_be_paired:
 						print("pairing " + self.name + " with " + card_to_be_paired.name)
 						self.queue_free()
 						card_to_be_paired.queue_free()
 					else:
-						get_parent().get_node("PairZone").card_to_be_paired = self
-				get_parent().selected_card = null
+						field.get_node("PairZone").card_to_be_paired = self
+				if not paired and target_pair['card'] != null:
+					attempt_pair_with_target()
+				field.selected_card = null
 
 func is_colliding(point):
-	var rect = get_node('CollisionShape2D').get_shape()
+	var rect = get_node('Full').get_shape()
 	if not (rect is RectangleShape2D):
 		return false
 	if (point.x <= position.x + rect.extents.x) and (point.x >= position.x - rect.extents.x):
@@ -112,9 +132,72 @@ func is_colliding(point):
 	return false
 
 func _on_Card_area_entered(area):
-	if get_parent().selected_card != self:
+	if field.selected_card != self:
 		set_modulate(Color(0,1,0))
 
 func _on_Card_area_exited(area):
-	if get_parent().selected_card != self:
+	if field.selected_card != self:
 		set_modulate(Color(1,1,1))
+
+
+func _on_Boundaries_area_shape_entered(area_id, area, area_shape, local_shape):
+	var our_dir = dir_map[local_shape]
+	var their_dir = dir_map[area_shape]
+	if their_dir == dir_pairs[our_dir]:
+		target_pair['dir'] = our_dir
+		target_pair['card'] = area.get_parent()
+		
+
+
+func _on_Boundaries_area_shape_exited(area_id, area, area_shape, local_shape):
+	# TODO: Potential edge cases here where cards aren't untargetted. Be careful
+	var our_dir = dir_map[local_shape]
+	var their_dir = dir_map[area_shape]
+	if their_dir == dir_pairs[our_dir] and area.get_parent() == target_pair['card']:
+		target_pair['dir'] = null
+		target_pair['card'] = null
+
+func attempt_pair_with_target():
+	var target = target_pair['card']
+	var our_dir = target_pair['dir']
+	var their_dir = dir_pairs[our_dir]
+	
+	var successful_pair = true
+	for i in range(0, 3):
+		if stats[our_dir][i] + target.stats[their_dir][i] != 0:
+			successful_pair = false
+			break
+	print('We attempt to pair ', self.name, ' ', 'from direction ' , target_pair['dir'], ' with ', target_pair['card'].name, ' ', 'from direction ' , dir_pairs[target_pair['dir']])
+	print('suceeds' if successful_pair else 'failed')
+
+	if successful_pair:
+		paired = true
+		target.paired = true
+		var pair_container = Node2D.new()
+		field.add_child(pair_container) 
+		field.remove_child(self)
+		pair_container.add_child(self)
+		field.remove_child(target)
+		pair_container.add_child(target)
+		var side_offset = 94
+		var top_offset = 158
+		if our_dir == 'left':
+			transform.origin.y = target.transform.origin.y
+			transform.origin.x = target.transform.origin.x + side_offset
+		elif our_dir == 'right':
+			transform.origin.y = target.transform.origin.y
+			transform.origin.x = target.transform.origin.x - side_offset
+		elif our_dir == 'up':
+			transform.origin.x = target.transform.origin.x
+			transform.origin.y = target.transform.origin.y + top_offset
+		elif our_dir == 'down':
+			transform.origin.x = target.transform.origin.x
+			transform.origin.y = target.transform.origin.y - top_offset
+		
+		
+		pair_container.transform.origin = (transform.origin + target.transform.origin) / 2
+		
+		transform.origin = transform.origin - pair_container.transform.origin 
+		target.transform.origin = target.transform.origin - pair_container.transform.origin
+		
+
