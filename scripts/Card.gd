@@ -1,7 +1,7 @@
 extends Area2D
 
 var stats = {
-	'left': [1, 0, 1],
+	'left': [1, 1, 1],
 	'right': [-1, 0, -1],
 	'up': [0, 0, 0],
 	'down': [0, 0, 0],
@@ -224,7 +224,8 @@ func set_invisible():
 func complete_pair():
 	pass
 
-var unpair_offset = 14
+var unpair_offset = 22
+
 var unpair_offsets = {
 	'left': Vector2(unpair_offset, 0),
 	'right': Vector2(-1 * unpair_offset, 0),
@@ -237,7 +238,7 @@ func unpair():
 		var child = get_node(name)
 		child.set_name('Card')
 		remove_child(child)
-		var multiplier = 1 if name == 'Child1' else -1
+		var multiplier = 1 if name == 'Child1' else 0
 		child.transform.origin = child.transform.origin + transform.origin + offset * multiplier
 		child.pair_state = 'unpaired'
 		field.add_child(child)
