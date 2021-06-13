@@ -1,8 +1,8 @@
 extends Area2D
 
 var stats = {
-	'left': [0, 0, 0],
-	'right': [0, 0, 0],
+	'left': [1, 0, 1],
+	'right': [-1, 0, -1],
 	'up': [0, 0, 0],
 	'down': [0, 0, 0],
 }
@@ -47,7 +47,8 @@ var dir_pairs = {
 	'down': 'up',
 }
 
-var paired = false
+var pair_state = 'unpaired'
+var pair_direction = null
 
 onready var interjambs = get_node("Interjambs")
 onready var field = get_tree().get_root().get_node('Field')
@@ -78,16 +79,18 @@ func _ready():
 
 func _process(delta):
 	if (field.selected_card == self):
-		if paired:
-			get_parent().set_position(get_viewport().get_mouse_position())
-		else:
+		if pair_state in ['pair_container', 'unpaired']:
 			set_position(get_viewport().get_mouse_position())
+		else:
+			pass
+	if Input.is_action_just_pressed("ui_down") and pair_state == 'pair_container':
+		unpair()
 
 # TODO move pair zone code to here.
 func _on_Card_input_event(viewport, event, shape_idx):
 
 	if event is InputEventMouseButton: # mouse has happened in the frame
-	
+		
 		var overlapping =  get_overlapping_areas()
 		var point = event.position
 		var local_max_z = z_index
@@ -109,16 +112,9 @@ func _on_Card_input_event(viewport, event, shape_idx):
 					z_index = local_max_z + 2
 				field.max_z = max(z_index, field.max_z)
 				
-				if in_pairzone:
-					var card_to_be_paired = field.get_node("PairZone").card_to_be_paired
-					
-					if card_to_be_paired:
-						print("pairing " + self.name + " with " + card_to_be_paired.name)
-						self.queue_free()
-						card_to_be_paired.queue_free()
-					else:
-						field.get_node("PairZone").card_to_be_paired = self
-				if not paired and target_pair['card'] != null:
+				if pair_state == 'pair_container' and in_pairzone:
+					complete_pair()
+				if pair_state == 'unpaired' and target_pair['card'] != null:
 					attempt_pair_with_target()
 				field.selected_card = null
 
@@ -171,14 +167,33 @@ func attempt_pair_with_target():
 	print('suceeds' if successful_pair else 'failed')
 
 	if successful_pair:
-		paired = true
-		target.paired = true
-		var pair_container = Node2D.new()
+		pair_state = 'paired'
+		target.pair_state = 'paired'
+		var pair_container = load("res://prefabs/Card.tscn").instance()
+		pair_container.set_invisible()
+		
+		pair_container.pair_state = 'pair_container'
+		
+		# expand the bounding box to be 2x the normal size on the appropriate axis
+		var bounding_box = pair_container.get_node('Full')
+		var curr_extents = bounding_box.get_shape().get_extents()
+		# turns out the shape is a singleton for all cards that persists in memory
+		# between scene reloads, very weird, so create a new one
+		bounding_box.shape = RectangleShape2D.new()
+		
+		if our_dir in ['left', 'right']:
+			bounding_box.shape.set_extents(Vector2(curr_extents.x * 2, curr_extents.y))
+		else:
+			bounding_box.shape.set_extents(Vector2(curr_extents.x , curr_extents.y * 2))
+		
 		field.add_child(pair_container) 
 		field.remove_child(self)
+		self.set_name('Child1')
 		pair_container.add_child(self)
 		field.remove_child(target)
+		target.set_name('Child2')
 		pair_container.add_child(target)
+		pair_container.pair_direction = our_dir
 		var side_offset = 94
 		var top_offset = 158
 		if our_dir == 'left':
@@ -201,3 +216,30 @@ func attempt_pair_with_target():
 		target.transform.origin = target.transform.origin - pair_container.transform.origin
 		
 
+func set_invisible():
+	for child in get_children():
+		child.visible = false
+
+func complete_pair():
+	pass
+
+var unpair_offset = 14
+var unpair_offsets = {
+	'left': Vector2(unpair_offset, 0),
+	'right': Vector2(-1 * unpair_offset, 0),
+	'down': Vector2(0, -1 * unpair_offset),
+	'up': Vector2(0, unpair_offset),
+}
+func unpair():
+	var offset = unpair_offsets[pair_direction]
+	for name in ['Child1', 'Child2']:
+		var child = get_node(name)
+		child.set_name('Card')
+		remove_child(child)
+		var multiplier = 1 if name == 'Child1' else -1
+		child.transform.origin = child.transform.origin + transform.origin + offset * multiplier
+		child.pair_state = 'unpaired'
+		field.add_child(child)
+	field.remove_child(self)
+	queue_free()
+	field.selected_card = null
