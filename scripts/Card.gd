@@ -80,9 +80,13 @@ func _ready():
 
 func _process(delta):
 	textlabel.text = str(self.z_index)
+	var right_boundary = 1024
+	var pair_zone_boundary = right_boundary - 135 - 200
 	if (field.selected_card == self):
 		if pair_state in ['pair_container', 'unpaired']:
 			set_position(get_viewport().get_mouse_position())
+			if pair_state == 'unpaired':
+				set_position(Vector2(min(transform.origin.x, pair_zone_boundary), transform.origin.y))
 		else:
 			pass
 
@@ -233,7 +237,14 @@ func set_invisible():
 		child.visible = false
 
 func complete_pair():
-	pass
+	field.selected_card = null
+	self.queue_free()
+	var total = 0
+	for jamb in get_node("Child1").stats[pair_direction]:
+		total += abs(jamb)
+
+	get_parent().get_node("Score").score += 100 * total
+
 
 var unpair_offset = 22 / 2
 

@@ -1,14 +1,29 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://prefabs/Card.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Field.gd" type="Script" id=2]
+[ext_resource path="res://scripts/Score.gd" type="Script" id=3]
 [ext_resource path="res://icon.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 128.864, 73.4201 )
+extents = Vector2( 134.305, 300.592 )
 
 [node name="Field" type="Node2D"]
 script = ExtResource( 2 )
+
+[node name="PairZone" type="Area2D" parent="."]
+position = Vector2( 889.612, 300.961 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="PairZone"]
+position = Vector2( -0.500038, 0.300529 )
+scale = Vector2( 4.18164, 9.38987 )
+texture = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PairZone"]
+shape = SubResource( 1 )
 
 [node name="Card1" parent="." instance=ExtResource( 1 )]
 position = Vector2( 612.296, 373.124 )
@@ -42,19 +57,22 @@ visible = false
 text = "Henry
 "
 
-[node name="PairZone" type="Area2D" parent="."]
-position = Vector2( 862.695, 216.292 )
+[node name="Score" type="Label" parent="."]
+margin_left = 1.0
+margin_right = 46.0
+margin_bottom = 57.0
+rect_scale = Vector2( 2, 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "1
+"
+align = 1
+valign = 1
+script = ExtResource( 3 )
 __meta__ = {
-"_edit_group_": true
+"_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="PairZone"]
-position = Vector2( -3.05176e-05, -1.73773 )
-scale = Vector2( 4.04101, 2.32139 )
-texture = ExtResource( 4 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PairZone"]
-shape = SubResource( 1 )
+[connection signal="input_event" from="PairZone" to="PairZone" method="_on_PairZone_input_event"]
 
 [editable path="Card2"]
 [editable path="Card3"]
