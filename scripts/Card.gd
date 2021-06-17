@@ -1,10 +1,10 @@
 extends Area2D
 
 var stats = {
-	'left': [1, 1, 1],
+	'left': [1, 0, 1],
 	'right': [-1, 0, -1],
-	'up': [0, 0, 0],
-	'down': [0, 0, 0],
+	'up': [0, 1, 0],
+	'down': [0, -1, 0],
 }
 
 var offsets = {
@@ -52,6 +52,7 @@ var pair_direction = null
 
 onready var interjambs = get_node("Interjambs")
 onready var field = get_tree().get_root().get_node('Field')
+onready var textlabel = get_node("RichTextLabel")
 
 func _ready():
 	var neujamb_prefab = load("res://prefabs/NeuJamb.tscn")
@@ -78,6 +79,7 @@ func _ready():
 				self.interjambs.add_child(jamb)
 
 func _process(delta):
+	textlabel.text = str(self.z_index)
 	if (field.selected_card == self):
 		if pair_state in ['pair_container', 'unpaired']:
 			set_position(get_viewport().get_mouse_position())
@@ -86,8 +88,10 @@ func _process(delta):
 
 # TODO move pair zone code to here.
 func _on_Card_input_event(viewport, event, shape_idx):
-
+	if pair_state == 'paired':
+		return
 	if event is InputEventMouseButton: # mouse has happened in the frame
+		print(self, event)
 		if event.button_index == BUTTON_LEFT:
 			var overlapping =  get_overlapping_areas()
 			var point = event.position
@@ -103,6 +107,7 @@ func _on_Card_input_event(viewport, event, shape_idx):
 				if z_index == local_max_z:
 					field.selected_card = self
 					z_index = field.max_z + 2
+					
 
 			else: # released
 				if field.selected_card == self:
@@ -112,7 +117,7 @@ func _on_Card_input_event(viewport, event, shape_idx):
 					
 					if pair_state == 'pair_container' and in_pairzone:
 						complete_pair()
-					if pair_state == 'unpaired' and target_pair['card'] != null:
+					if pair_state == 'unpaired' and target_pair['card'] != null and target_pair['card'].pair_state == 'unpaired':
 						attempt_pair_with_target()
 					field.selected_card = null
 		if event.button_index == BUTTON_RIGHT:
@@ -130,11 +135,13 @@ func is_colliding(point):
 
 func _on_Card_area_entered(area):
 	if field.selected_card != self:
-		set_modulate(Color(0,1,0))
+		#set_modulate(Color(0,1,0))
+		pass
 
 func _on_Card_area_exited(area):
 	if field.selected_card != self:
-		set_modulate(Color(1,1,1))
+		#set_modulate(Color(1,1,1))
+		pass
 
 
 func _on_Boundaries_area_shape_entered(area_id, area, area_shape, local_shape):
@@ -150,7 +157,7 @@ func _on_Boundaries_area_shape_exited(area_id, area, area_shape, local_shape):
 	# TODO: Potential edge cases here where cards aren't untargetted. Be careful
 	var our_dir = dir_map[local_shape]
 	var their_dir = dir_map[area_shape]
-	if their_dir == dir_pairs[our_dir] and area.get_parent() == target_pair['card']:
+	if area != null and their_dir == dir_pairs[our_dir] and area.get_parent() == target_pair['card']:
 		target_pair['dir'] = null
 		target_pair['card'] = null
 
@@ -172,7 +179,6 @@ func attempt_pair_with_target():
 		target.pair_state = 'paired'
 		var pair_container = load("res://prefabs/Card.tscn").instance()
 		pair_container.set_invisible()
-		
 		pair_container.pair_state = 'pair_container'
 		
 		# expand the bounding box to be 2x the normal size on the appropriate axis
@@ -186,15 +192,20 @@ func attempt_pair_with_target():
 			bounding_box.shape.set_extents(Vector2(curr_extents.x * 2, curr_extents.y))
 		else:
 			bounding_box.shape.set_extents(Vector2(curr_extents.x , curr_extents.y * 2))
-		
+
 		field.add_child(pair_container) 
 		field.remove_child(self)
 		self.set_name('Child1')
+		self.z_index = 0
 		pair_container.add_child(self)
+		field.max_z += 2
+		pair_container.z_index = field.max_z
 		field.remove_child(target)
 		target.set_name('Child2')
+		target.z_index = 0
 		pair_container.add_child(target)
 		pair_container.pair_direction = our_dir
+		
 		var side_offset = 94
 		var top_offset = 158
 		if our_dir == 'left':
@@ -224,7 +235,7 @@ func set_invisible():
 func complete_pair():
 	pass
 
-var unpair_offset = 22
+var unpair_offset = 22 / 2
 
 var unpair_offsets = {
 	'left': Vector2(unpair_offset, 0),
@@ -238,10 +249,11 @@ func unpair():
 		var child = get_node(name)
 		child.set_name('Card')
 		remove_child(child)
-		var multiplier = 1 if name == 'Child1' else 0
+		var multiplier = 1 if name == 'Child1' else -1
 		child.transform.origin = child.transform.origin + transform.origin + offset * multiplier
 		child.pair_state = 'unpaired'
 		field.add_child(child)
+		child.z_index = z_index
 	field.remove_child(self)
 	queue_free()
 	field.selected_card = null

@@ -4,7 +4,7 @@
 [ext_resource path="res://scripts/Field.gd" type="Script" id=2]
 [ext_resource path="res://icon.png" type="Texture" id=4]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 128.864, 73.4201 )
 
 [node name="Field" type="Node2D"]
@@ -16,11 +16,31 @@ position = Vector2( 612.296, 373.124 )
 [node name="Card2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 333.843, 197.58 )
 
-[node name="CanvasModulate" parent="Card2" index="5"]
+[node name="CanvasModulate" parent="Card2" index="4"]
 visible = false
 
-[node name="RichTextLabel" parent="Card2" index="6"]
+[node name="RichTextLabel" parent="Card2" index="5"]
 text = "James"
+
+[node name="Card3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 341.158, 413.853 )
+
+[node name="CanvasModulate" parent="Card3" index="4"]
+visible = false
+
+[node name="RichTextLabel" parent="Card3" index="5"]
+text = "Henry
+"
+
+[node name="Card4" parent="." instance=ExtResource( 1 )]
+position = Vector2( 149.15, 255.592 )
+
+[node name="CanvasModulate" parent="Card4" index="4"]
+visible = false
+
+[node name="RichTextLabel" parent="Card4" index="5"]
+text = "Henry
+"
 
 [node name="PairZone" type="Area2D" parent="."]
 position = Vector2( 862.695, 216.292 )
@@ -34,6 +54,8 @@ scale = Vector2( 4.04101, 2.32139 )
 texture = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PairZone"]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [editable path="Card2"]
+[editable path="Card3"]
+[editable path="Card4"]
