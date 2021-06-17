@@ -1,10 +1,10 @@
 extends Area2D
 
 var stats = {
-	'left': [1, 0, 1],
-	'right': [-1, 0, -1],
-	'up': [0, 1, 0],
-	'down': [0, -1, 0],
+	'left': [0, 0, 0],
+	'right': [0, 0, 0],
+	'up': [0, 0, 0],
+	'down': [0, 0, 0],
 }
 
 var offsets = {
@@ -57,10 +57,12 @@ onready var textlabel = get_node("RichTextLabel")
 func _ready():
 	var neujamb_prefab = load("res://prefabs/NeuJamb.tscn")
 	var posjamb_prefab = load("res://prefabs/PosJamb.tscn")
+	
 	for dir in ['left', 'right', 'up', 'down']:
 		for i in range(0, len(stats[dir])):
 			var jamb = null
 			var offset = null
+			
 			if stats[dir][i] == 0:
 				jamb = neujamb_prefab.instance()
 				offset = offsets[dir]['neu']
