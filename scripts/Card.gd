@@ -38,7 +38,7 @@ var target_pair = {
 	'dir': 'up',
 }
 
-var dir_map = ['up', 'right', 'left', 'down']
+var dir_map = ['up', 'left', 'right', 'down']
 
 var dir_pairs = {
 	'left' : 'right',
@@ -52,9 +52,18 @@ var pair_direction = null
 
 onready var interjambs = get_node("Interjambs")
 onready var field = get_tree().get_root().get_node('Field')
-onready var textlabel = get_node("RichTextLabel")
+onready var textlabel = get_node("Label")
+onready var face = get_node("Face")
+
+var wriggle = false
+var wriggle_degrees = 0
+var wriggle_right = false
+var target = 10
 
 func _ready():
+	var card_data = field.get_node('CardData')
+	face.set_texture(card_data.new_sprite_texture())
+	textlabel.text = card_data.new_name()
 	var neujamb_prefab = load("res://prefabs/NeuJamb.tscn")
 	var posjamb_prefab = load("res://prefabs/PosJamb.tscn")
 	
@@ -80,8 +89,21 @@ func _ready():
 				jamb.z_index = 1
 				self.interjambs.add_child(jamb)
 
+var colors = [
+	Color(0.95, 0.95, 0.95, 1),
+]
+
 func _process(delta):
-	textlabel.text = str(self.z_index)
+	#self.rotation += 5 * delta
+	if wriggle:
+		var speed = 100
+		var vel = -1 * speed if wriggle_right else 1 * speed
+		wriggle_degrees += vel * delta
+		if (target > 0 and wriggle_degrees > target) or (target <= 0 and wriggle_degrees < target):
+			target = -1 * target
+			wriggle_right = not wriggle_right
+	rotation_degrees = wriggle_degrees
+	set_color(colors[0])
 	var right_boundary = 1024
 	var pair_zone_boundary = right_boundary - 135 - 200
 	if (field.selected_card == self):
@@ -151,23 +173,34 @@ func _on_Card_area_exited(area):
 
 
 func _on_Boundaries_area_shape_entered(area_id, area, area_shape, local_shape):
-	var our_dir = dir_map[local_shape]
-	var their_dir = dir_map[area_shape]
-	if their_dir == dir_pairs[our_dir]:
-		target_pair['dir'] = our_dir
-		target_pair['card'] = area.get_parent()
-		
+	if self == field.selected_card:
+		var our_dir = dir_map[local_shape]
+		var their_dir = dir_map[area_shape]
+		if their_dir == dir_pairs[our_dir]:
+			target_pair['dir'] = our_dir
+			var prev_target = target_pair['card']
+			target_pair['card'] = area.get_parent()
+			if prev_target != target_pair['card'] and can_pair():
+				if prev_target != null:
+					prev_target.stop_wriggle()
+				target_pair['card'].start_wriggle()
 
+func set_color(color):
+	get_node('Base').modulate = color
+	get_node('Interjambs').modulate = color
 
 func _on_Boundaries_area_shape_exited(area_id, area, area_shape, local_shape):
 	# TODO: Potential edge cases here where cards aren't untargetted. Be careful
-	var our_dir = dir_map[local_shape]
-	var their_dir = dir_map[area_shape]
-	if area != null and their_dir == dir_pairs[our_dir] and area.get_parent() == target_pair['card']:
-		target_pair['dir'] = null
-		target_pair['card'] = null
+	if self == field.selected_card:
+		var our_dir = dir_map[local_shape]
+		var their_dir = dir_map[area_shape]
+		if area != null and their_dir == dir_pairs[our_dir] and area.get_parent() == target_pair['card']:
+			target_pair['dir'] = null
+			target_pair['card'].stop_wriggle()
+			target_pair['card'] = null
+		
 
-func attempt_pair_with_target():
+func can_pair():
 	var target = target_pair['card']
 	var our_dir = target_pair['dir']
 	var their_dir = dir_pairs[our_dir]
@@ -177,10 +210,15 @@ func attempt_pair_with_target():
 		if stats[our_dir][i] + target.stats[their_dir][i] != 0:
 			successful_pair = false
 			break
-	print('We attempt to pair ', self.name, ' ', 'from direction ' , target_pair['dir'], ' with ', target_pair['card'].name, ' ', 'from direction ' , dir_pairs[target_pair['dir']])
-	print('suceeds' if successful_pair else 'failed')
+	return successful_pair
 
-	if successful_pair:
+func attempt_pair_with_target():
+	if can_pair():
+		var target = target_pair['card']
+		var our_dir = target_pair['dir']
+		var their_dir = dir_pairs[our_dir]
+		print('We attempt to pair ', self.name, ' ', 'from direction ' , target_pair['dir'], ' with ', target_pair['card'].name, ' ', 'from direction ' , dir_pairs[target_pair['dir']])
+
 		pair_state = 'paired'
 		target.pair_state = 'paired'
 		var pair_container = load("res://prefabs/Card.tscn").instance()
@@ -214,10 +252,10 @@ func attempt_pair_with_target():
 		
 		var side_offset = 94
 		var top_offset = 158
-		if our_dir == 'left':
+		if our_dir == 'right':
 			transform.origin.y = target.transform.origin.y
 			transform.origin.x = target.transform.origin.x + side_offset
-		elif our_dir == 'right':
+		elif our_dir == 'left':
 			transform.origin.y = target.transform.origin.y
 			transform.origin.x = target.transform.origin.x - side_offset
 		elif our_dir == 'up':
@@ -251,8 +289,8 @@ func complete_pair():
 var unpair_offset = 22 / 2
 
 var unpair_offsets = {
-	'left': Vector2(unpair_offset, 0),
-	'right': Vector2(-1 * unpair_offset, 0),
+	'right': Vector2(unpair_offset, 0),
+	'left': Vector2(-1 * unpair_offset, 0),
 	'down': Vector2(0, -1 * unpair_offset),
 	'up': Vector2(0, unpair_offset),
 }
@@ -270,3 +308,18 @@ func unpair():
 	field.remove_child(self)
 	queue_free()
 	field.selected_card = null
+
+func start_wriggle():
+	print(textlabel.text + ' starts to wriggle')
+	wriggle = true
+	wriggle_degrees = 0
+	wriggle_right = false
+	target = 10
+	
+	
+func stop_wriggle():
+	print(textlabel.text + ' stops wriggling')
+	wriggle = false
+	wriggle_degrees = 0
+	wriggle_right = false
+	target = 10
