@@ -54,6 +54,7 @@ onready var interjambs = get_node("Interjambs")
 onready var field = get_tree().get_root().get_node('Field')
 onready var textlabel = get_node("Label")
 onready var face = get_node("Face")
+onready var base = get_node("Base")
 
 var wriggle = false
 var wriggle_degrees = 0
@@ -102,7 +103,11 @@ func _process(delta):
 		if (target > 0 and wriggle_degrees > target) or (target <= 0 and wriggle_degrees < target):
 			target = -1 * target
 			wriggle_right = not wriggle_right
-	rotation_degrees = wriggle_degrees
+	#rotation_degrees = wriggle_degrees
+	interjambs.rotation_degrees = wriggle_degrees
+	face.rotation_degrees = wriggle_degrees
+	base.rotation_degrees = wriggle_degrees
+	#textlabel.rotation_degrees = wriggle_degrees
 	set_color(colors[0])
 	var right_boundary = 1024
 	var pair_zone_boundary = right_boundary - 135 - 200
@@ -119,7 +124,6 @@ func _on_Card_input_event(viewport, event, shape_idx):
 	if pair_state == 'paired':
 		return
 	if event is InputEventMouseButton: # mouse has happened in the frame
-		print(self, event)
 		if event.button_index == BUTTON_LEFT:
 			var overlapping =  get_overlapping_areas()
 			var point = event.position
@@ -191,20 +195,30 @@ func set_color(color):
 
 func _on_Boundaries_area_shape_exited(area_id, area, area_shape, local_shape):
 	# TODO: Potential edge cases here where cards aren't untargetted. Be careful
-	if self == field.selected_card:
-		var our_dir = dir_map[local_shape]
-		var their_dir = dir_map[area_shape]
-		if area != null and their_dir == dir_pairs[our_dir] and area.get_parent() == target_pair['card']:
+
+	var our_dir = dir_map[local_shape]
+	var their_dir = dir_map[area_shape]
+	if area != null:
+		var exited_card = area.get_parent()
+		if self == field.selected_card and exited_card and exited_card.wriggle:
+			print("card ", self, 'left  area ', exited_card)
+			exited_card.stop_wriggle()
+		if their_dir == dir_pairs[our_dir] and exited_card == target_pair['card']:
 			target_pair['dir'] = null
-			target_pair['card'].stop_wriggle()
 			target_pair['card'] = null
-		
+
 
 func can_pair():
 	var target = target_pair['card']
 	var our_dir = target_pair['dir']
 	var their_dir = dir_pairs[our_dir]
 	
+	if not target:
+		return false
+
+	if target.pair_state != 'unpaired' or target.pair_state != 'unpaired':
+		return false
+
 	var successful_pair = true
 	for i in range(0, 3):
 		if stats[our_dir][i] + target.stats[their_dir][i] != 0:
@@ -241,12 +255,14 @@ func attempt_pair_with_target():
 		field.remove_child(self)
 		self.set_name('Child1')
 		self.z_index = 0
+		self.stop_wriggle()
 		pair_container.add_child(self)
 		field.max_z += 2
 		pair_container.z_index = field.max_z
 		field.remove_child(target)
 		target.set_name('Child2')
 		target.z_index = 0
+		target.stop_wriggle()
 		pair_container.add_child(target)
 		pair_container.pair_direction = our_dir
 		
@@ -310,6 +326,7 @@ func unpair():
 	field.selected_card = null
 
 func start_wriggle():
+	#return
 	print(textlabel.text + ' starts to wriggle')
 	wriggle = true
 	wriggle_degrees = 0
@@ -318,6 +335,7 @@ func start_wriggle():
 	
 	
 func stop_wriggle():
+	#return
 	print(textlabel.text + ' stops wriggling')
 	wriggle = false
 	wriggle_degrees = 0
