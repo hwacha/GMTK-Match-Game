@@ -7,6 +7,8 @@ var stats = {
 	'down': [0, 0, 0],
 }
 
+var attributes = [0.0, 0.0, 0.0]
+
 var offsets = {
 	'left': {
 		'neu' : Vector2(40, 26),
@@ -91,7 +93,7 @@ func _ready():
 				self.interjambs.add_child(jamb)
 
 var colors = [
-	Color(0.95, 0.95, 0.95, 1),
+	Color(0.85, 0.85, 0.7, 1),
 ]
 
 func _process(delta):
@@ -137,7 +139,7 @@ func _on_Card_input_event(viewport, event, shape_idx):
 			
 			if event.is_pressed():
 				if z_index == local_max_z:
-					field.selected_card = self
+					field.set_selected_card(self)
 					z_index = field.max_z + 2
 					
 
@@ -151,7 +153,7 @@ func _on_Card_input_event(viewport, event, shape_idx):
 						complete_pair()
 					if pair_state == 'unpaired' and target_pair['card'] != null and target_pair['card'].pair_state == 'unpaired':
 						attempt_pair_with_target()
-					field.selected_card = null
+					field.set_selected_card(null)
 		if event.button_index == BUTTON_RIGHT:
 			if event.is_pressed() and pair_state == 'pair_container':
 				unpair()
@@ -293,7 +295,7 @@ func set_invisible():
 		child.visible = false
 
 func complete_pair():
-	field.selected_card = null
+	field.set_selected_card(null)
 	self.queue_free()
 	var total = 0
 	for jamb in get_node("Child1").stats[pair_direction]:
@@ -323,7 +325,7 @@ func unpair():
 		child.z_index = z_index
 	field.remove_child(self)
 	queue_free()
-	field.selected_card = null
+	field.set_selected_card(null)
 
 func start_wriggle():
 	#return

@@ -5,13 +5,13 @@
 [ext_resource path="res://scripts/Score.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 134.305, 300.592 )
+extents = Vector2( 134.305, 124.795 )
 
 [node name="Field" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="PairZone" type="Area2D" parent="."]
-position = Vector2( 889.612, 300.961 )
+position = Vector2( 889.612, 124.808 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -40,7 +40,47 @@ __meta__ = {
 
 [node name="CardData" parent="." instance=ExtResource( 1 )]
 
-[node name="View" type="Node2D" parent="."]
-position = Vector2( 1, 0 )
+[node name="CardView" type="Node2D" parent="."]
+position = Vector2( 887.111, 428.385 )
+
+[node name="Sprite" type="Sprite" parent="CardView"]
+position = Vector2( 0, -63.3778 )
+scale = Vector2( 1.5, 1.5 )
+
+[node name="Attribute1" type="Label" parent="CardView"]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
+margin_left = -86.9665
+margin_top = -2.3718
+margin_right = -27.9665
+margin_bottom = 11.6282
+text = "neuroticism"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Attribute2" type="Label" parent="CardView"]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
+margin_left = -86.9665
+margin_top = 44.2738
+margin_right = -27.9665
+margin_bottom = 58.2738
+text = "extroversion"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Attribute3" type="Label" parent="CardView"]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
+margin_left = -86.9665
+margin_top = 82.2227
+margin_right = -27.9665
+margin_bottom = 96.2227
+text = "thrill-seeker"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="input_event" from="PairZone" to="PairZone" method="_on_PairZone_input_event"]
