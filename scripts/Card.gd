@@ -7,7 +7,7 @@ var stats = {
 	'down': [0, 0, 0],
 }
 
-var attributes = [0.0, 0.0, 0.0]
+var attributes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 var offsets = {
 	'left': {
@@ -109,6 +109,7 @@ func _process(delta):
 	interjambs.rotation_degrees = wriggle_degrees
 	face.rotation_degrees = wriggle_degrees
 	base.rotation_degrees = wriggle_degrees
+	$Stats.rotation_degrees = wriggle_degrees
 	#textlabel.rotation_degrees = wriggle_degrees
 	set_color(colors[0])
 	var right_boundary = 1024
@@ -211,10 +212,13 @@ func _on_Boundaries_area_shape_exited(area_id, area, area_shape, local_shape):
 
 
 func can_pair():
+
+
 	var target = target_pair['card']
 	var our_dir = target_pair['dir']
 	var their_dir = dir_pairs[our_dir]
-	
+	if our_dir in ['up', 'down']:
+		return false
 	if not target:
 		return false
 
@@ -293,6 +297,7 @@ func attempt_pair_with_target():
 func set_invisible():
 	for child in get_children():
 		child.visible = false
+	get_node('Stats').visible = true
 
 func complete_pair():
 	field.set_selected_card(null)

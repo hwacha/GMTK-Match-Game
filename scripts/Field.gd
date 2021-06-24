@@ -21,15 +21,16 @@ func _ready():
 		
 #		var guaranteed_jamb_dir = 1 if n % 2 == 0 else -1
 		
-		for dir in ['left', 'right', 'up', 'down']:
+		for dir in ['left', 'right']:
 			for i in range(0, len(card.stats[dir])):
 				var coin_flip = rng.randi_range(0, 1)
 				if coin_flip == 0:
 					coin_flip = -1
 				card.stats[dir][i] = coin_flip
+			card.stats[dir][1] = 0
 		
 		for i in range(len(card.attributes)):
-			card.attributes[i] = rng.randf_range(0.0, 5.0)
+			card.attributes[i] = rng.randf_range(1.0, 5.0)
 
 		var x = rng.randi_range(75, 700)
 		var y = rng.randi_range(200, 500)
