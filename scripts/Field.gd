@@ -8,7 +8,7 @@ onready var _card_view = get_node("CardView")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var card_prefab = load("res://prefabs/Card.tscn")
-	var num_cards = 5
+	var num_cards = 20
 	
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()

@@ -1,7 +1,7 @@
 extends Node2D
 
 
-var icon_count = 42
+var icon_count = 41
 
 var item_type = null
 

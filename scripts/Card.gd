@@ -9,6 +9,8 @@ var stats = {
 
 var attributes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
+var icons = [0, 0, 0, 0]
+
 var offsets = {
 	'left': {
 		'neu' : Vector2(40, 26),
@@ -54,7 +56,7 @@ var pair_direction = null
 
 onready var interjambs = get_node("Interjambs")
 onready var field = get_tree().get_root().get_node('Field')
-onready var textlabel = get_node("Label")
+onready var textlabel = get_node("LabelContainer/Label")
 onready var face = get_node("Face")
 onready var base = get_node("Base")
 
@@ -67,6 +69,15 @@ func _ready():
 	var card_data = field.get_node('CardData')
 	face.set_texture(card_data.new_sprite_texture())
 	textlabel.text = card_data.new_name()
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	for i in range(0, len(icons)):
+		print(icons)
+		var cand = rng.randi_range(1, 41)
+		while icons.has(cand):
+			cand = rng.randi_range(1, 41)
+		icons[i] = cand
+
 	var neujamb_prefab = load("res://prefabs/NeuJamb.tscn")
 	var posjamb_prefab = load("res://prefabs/PosJamb.tscn")
 	
@@ -91,7 +102,12 @@ func _ready():
 					jamb.transform.origin.y = offset.y
 				jamb.z_index = 1
 				self.interjambs.add_child(jamb)
-
+	var i = 0
+	for icon in $Icons.get_children():
+		icon.animation = str(icons[i])
+		i = i + 1
+		
+	
 var colors = [
 	Color(0.85, 0.85, 0.7, 1),
 ]
@@ -110,8 +126,9 @@ func _process(delta):
 	face.rotation_degrees = wriggle_degrees
 	base.rotation_degrees = wriggle_degrees
 	$Stats.rotation_degrees = wriggle_degrees
-	#textlabel.rotation_degrees = wriggle_degrees
-	set_color(colors[0])
+	$Icons.rotation_degrees = wriggle_degrees
+	$LabelContainer.rotation_degrees = wriggle_degrees
+	#set_color(colors[0])
 	var right_boundary = 1024
 	var pair_zone_boundary = right_boundary - 135 - 200
 	if (field.selected_card == self):

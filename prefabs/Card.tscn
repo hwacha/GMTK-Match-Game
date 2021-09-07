@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/card_sprites/base.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Card.gd" type="Script" id=2]
-[ext_resource path="res://scripts/Visual.gd" type="Script" id=3]
 [ext_resource path="res://prefabs/Icon.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -19,11 +18,6 @@ script = ExtResource( 2 )
 
 [node name="Full" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="Interjambs" type="Node2D" parent="."]
 __meta__ = {
 "_edit_lock_": true
 }
@@ -46,19 +40,48 @@ __meta__ = {
 }
 
 [node name="Stats" type="Node2D" parent="."]
-script = ExtResource( 3 )
 
-[node name="Label" type="Label" parent="."]
-margin_left = -31.7307
-margin_top = 5.1181
-margin_right = 30.2693
-margin_bottom = 36.1181
+[node name="LabelContainer" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="LabelContainer"]
+margin_left = -31.0
+margin_top = 2.0
+margin_right = 31.0
+margin_bottom = 31.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "
+text = "test
 "
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
+}
+
+[node name="Icons" type="Node2D" parent="."]
+z_index = 2
+
+[node name="Icon1" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( -16.1311, 30 )
+animation = "9"
+frame = 0
+
+[node name="Icon2" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( -16, 62 )
+animation = "9"
+frame = 0
+
+[node name="Icon3" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( 16, 30 )
+animation = "9"
+frame = 0
+
+[node name="Icon4" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( 16, 62 )
+animation = "9"
+frame = 0
+
+[node name="Interjambs" type="Node2D" parent="."]
+__meta__ = {
+"_edit_lock_": true
 }
 
 [node name="Boundaries" type="Area2D" parent="."]
@@ -95,26 +118,6 @@ shape = SubResource( 2 )
 __meta__ = {
 "_edit_lock_": true
 }
-
-[node name="Icons" type="Node2D" parent="."]
-
-[node name="Icon2" parent="Icons" instance=ExtResource( 4 )]
-position = Vector2( 1.29572, 47.0158 )
-
-[node name="Icon" parent="Icons" instance=ExtResource( 4 )]
-position = Vector2( 1.29572, 16.2889 )
-
-[node name="Icon3" parent="Icons" instance=ExtResource( 4 )]
-position = Vector2( 23.5079, 16.2889 )
-
-[node name="Icon4" parent="Icons" instance=ExtResource( 4 )]
-position = Vector2( 23.5079, 47.0158 )
-
-[node name="Icon5" parent="Icons" instance=ExtResource( 4 )]
-position = Vector2( -21.6569, 16.2889 )
-
-[node name="Icon6" parent="Icons" instance=ExtResource( 4 )]
-position = Vector2( -21.6569, 47.0158 )
 
 [connection signal="area_entered" from="." to="." method="_on_Card_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_Card_area_exited"]
