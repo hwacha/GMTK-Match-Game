@@ -376,5 +376,5 @@ animations = [ {
 
 [node name="Icon" type="AnimatedSprite"]
 frames = SubResource( 42 )
-frame = 15
+animation = "1"
 playing = true

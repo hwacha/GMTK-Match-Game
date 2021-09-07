@@ -4,7 +4,7 @@ export var max_z = 0
 
 var selected_card = null
 #onready var card_manager = get_node("CardManager")
-onready var _card_view = get_node("CardView")
+onready var _card_view = get_node("CardViewer")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var card_prefab = load("res://prefabs/Card.tscn")
@@ -41,15 +41,17 @@ func _ready():
 	max_z = 2 * num_cards
 	
 func _draw():
-	if selected_card:
-		var size_1 = selected_card.attributes[0]
-		var size_2 = selected_card.attributes[1]
-		var size_3 = selected_card.attributes[2]
 	
-		draw_rect(Rect2(Vector2(800, 450), Vector2(42 * size_1, 12)), Color(0.4, 0.3, 0.1, 1.0))
-		draw_rect(Rect2(Vector2(800, 490), Vector2(42 * size_2, 12)), Color(0.25, 0.7, 0.8, 1.0))
-		draw_rect(Rect2(Vector2(800, 530), Vector2(42 * size_3, 12)), Color(0.7, 0.2, 0.5, 1.0))
-
+#	if selected_card:
+#		var size_1 = selected_card.attributes[0]
+#		var size_2 = selected_card.attributes[1]
+#		var size_3 = selected_card.attributes[2]
+#
+#		draw_rect(Rect2(Vector2(800, 450), Vector2(42 * size_1, 12)), Color(0.4, 0.3, 0.1, 1.0))
+#		draw_rect(Rect2(Vector2(800, 490), Vector2(42 * size_2, 12)), Color(0.25, 0.7, 0.8, 1.0))
+#		draw_rect(Rect2(Vector2(800, 530), Vector2(42 * size_3, 12)), Color(0.7, 0.2, 0.5, 1.0))
+	pass
+	
 func set_selected_card(card):
 	selected_card = card
 	if card:
