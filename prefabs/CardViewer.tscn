@@ -1,20 +1,22 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://prefabs/Card.tscn" type="PackedScene" id=1]
 [ext_resource path="res://prefabs/Icon.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/pixel_faces/00067.png" type="Texture" id=3]
 
 [node name="CardView" type="Node2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 0, -96 )
+position = Vector2( 1.07642, -97.6146 )
 scale = Vector2( 3, 3 )
+texture = ExtResource( 3 )
 
 [node name="Label" type="Label" parent="."]
-modulate = Color( 0, 0, 0, 1 )
 margin_left = -90.1953
-margin_top = 33.9074
+margin_top = 38.7513
 margin_right = 82.8047
-margin_bottom = 81.9074
+margin_bottom = 86.7513
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "I love wearing contacts ya 
 feel? It makes me feel like
 I'm not blind"
@@ -23,59 +25,59 @@ __meta__ = {
 }
 
 [node name="Attribute1" type="Label" parent="."]
-modulate = Color( 0, 0, 0, 1 )
 margin_left = -86.966
+margin_top = 2.0
 margin_right = -9.966
 margin_bottom = 14.0
 rect_scale = Vector2( 2, 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "James, 34"
 __meta__ = {
-"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
 [node name="Attribute2" type="Label" parent="."]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = -88.5811
-margin_top = 83.5633
-margin_right = -29.5811
-margin_bottom = 97.5633
-text = "Likes
-"
+margin_left = -92.1529
+margin_top = 98.1561
+margin_right = -53.1529
+margin_bottom = 112.156
+rect_scale = Vector2( 1.5, 1.5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Likes:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Attribute3" type="Label" parent="."]
+margin_left = -91.0764
+margin_top = 138.522
+margin_right = -50.0764
+margin_bottom = 152.522
+rect_scale = Vector2( 1.5, 1.5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Hates:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Icon" parent="." instance=ExtResource( 2 )]
-position = Vector2( -17.6146, 106.292 )
+position = Vector2( -14.9236, 115.98 )
 
 [node name="Icon2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 22.3854, 105.162 )
+position = Vector2( 25.0764, 114.85 )
 
 [node name="Icon3" parent="." instance=ExtResource( 2 )]
-position = Vector2( -17.6146, 147.828 )
+position = Vector2( -14.9236, 157.516 )
 
 [node name="Icon4" parent="." instance=ExtResource( 2 )]
-position = Vector2( 22.3854, 147.289 )
-
-[node name="Attribute3" type="Label" parent="."]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = -88.5811
-margin_top = 121.512
-margin_right = -29.5811
-margin_bottom = 152.512
-text = "Hates
-"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+position = Vector2( 25.0764, 156.977 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 show_behind_parent = true
-margin_left = -95.6861
-margin_top = -179.058
-margin_right = 96.3139
-margin_bottom = 180.942
+margin_left = -96.0
+margin_top = -180.0
+margin_right = 96.0
+margin_bottom = 180.0
 color = Color( 0.74902, 0.717647, 0.717647, 1 )
 __meta__ = {
 "_edit_lock_": true,

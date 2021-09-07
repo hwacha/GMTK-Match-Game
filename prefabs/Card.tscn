@@ -7,12 +7,12 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 47, 79 )
 
-[sub_resource type="StreamTexture" id=4]
-
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 47, 10 )
+[sub_resource type="StreamTexture" id=2]
 
 [sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 47, 10 )
+
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 23.5, 59 )
 
 [node name="Card" type="Area2D"]
@@ -31,7 +31,7 @@ __meta__ = {
 }
 
 [node name="Face" type="Sprite" parent="."]
-texture = SubResource( 4 )
+texture = SubResource( 2 )
 offset = Vector2( 0, -32 )
 __meta__ = {
 "_edit_lock_": true
@@ -65,22 +65,18 @@ z_index = 2
 [node name="Icon1" parent="Icons" instance=ExtResource( 4 )]
 position = Vector2( -16.1311, 30 )
 animation = "9"
-frame = 0
 
 [node name="Icon2" parent="Icons" instance=ExtResource( 4 )]
 position = Vector2( -16, 62 )
 animation = "9"
-frame = 0
 
 [node name="Icon3" parent="Icons" instance=ExtResource( 4 )]
 position = Vector2( 16, 30 )
 animation = "9"
-frame = 0
 
 [node name="Icon4" parent="Icons" instance=ExtResource( 4 )]
 position = Vector2( 16, 62 )
 animation = "9"
-frame = 0
 
 [node name="Interjambs" type="Node2D" parent="."]
 __meta__ = {
@@ -96,28 +92,28 @@ __meta__ = {
 
 [node name="Up" type="CollisionShape2D" parent="Boundaries"]
 position = Vector2( 0, -69 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="Right" type="CollisionShape2D" parent="Boundaries"]
 position = Vector2( 23.3749, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="Left" type="CollisionShape2D" parent="Boundaries"]
 position = Vector2( -23.5, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="Down" type="CollisionShape2D" parent="Boundaries"]
 position = Vector2( 0, 69.1251 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true
 }

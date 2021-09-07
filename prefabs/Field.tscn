@@ -12,7 +12,7 @@ extents = Vector2( 135, 125 )
 script = ExtResource( 2 )
 
 [node name="PairZone" type="Area2D" parent="."]
-position = Vector2( 889.612, 125.422 )
+position = Vector2( 426.752, 479.235 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -42,6 +42,9 @@ __meta__ = {
 [node name="CardData" parent="." instance=ExtResource( 1 )]
 
 [node name="CardViewer" parent="." instance=ExtResource( 4 )]
-position = Vector2( 890, 420 )
+position = Vector2( 736.558, 178.556 )
+
+[node name="CardViewer2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 927.711, 178.556 )
 
 [connection signal="input_event" from="PairZone" to="PairZone" method="_on_PairZone_input_event"]
