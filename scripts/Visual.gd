@@ -15,7 +15,7 @@ func _draw():
 #	var rng = RandomNumberGenerator.new()
 #	rng.randomize()
 	var parent = get_parent()
-	if parent.pair_state == 'unpaired':
+	if parent.pair_state in ['unpaired', 'paired']:
 		draw_attributes(parent.attributes)
 		draw_axises(len(parent.attributes))
 		self.z_index = 0

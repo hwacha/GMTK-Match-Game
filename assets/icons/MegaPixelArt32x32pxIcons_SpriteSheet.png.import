@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/01808.png-3c5dffc8be1f4c543e2a33997540cb47.stex"
+path="res://.import/MegaPixelArt32x32pxIcons_SpriteSheet.png-8dd7dcad127ba5c40083f5d4b62ad1cd.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/pixel_faces/01808.png"
-dest_files=[ "res://.import/01808.png-3c5dffc8be1f4c543e2a33997540cb47.stex" ]
+source_file="res://assets/icons/MegaPixelArt32x32pxIcons_SpriteSheet.png"
+dest_files=[ "res://.import/MegaPixelArt32x32pxIcons_SpriteSheet.png-8dd7dcad127ba5c40083f5d4b62ad1cd.stex" ]
 
 [params]
 

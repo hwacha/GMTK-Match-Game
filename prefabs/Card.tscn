@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/card_sprites/base.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Card.gd" type="Script" id=2]
 [ext_resource path="res://scripts/Visual.gd" type="Script" id=3]
+[ext_resource path="res://prefabs/Icon.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 47, 79 )
@@ -94,6 +95,26 @@ shape = SubResource( 2 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="Icons" type="Node2D" parent="."]
+
+[node name="Icon2" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( 1.29572, 47.0158 )
+
+[node name="Icon" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( 1.29572, 16.2889 )
+
+[node name="Icon3" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( 23.5079, 16.2889 )
+
+[node name="Icon4" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( 23.5079, 47.0158 )
+
+[node name="Icon5" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( -21.6569, 16.2889 )
+
+[node name="Icon6" parent="Icons" instance=ExtResource( 4 )]
+position = Vector2( -21.6569, 47.0158 )
 
 [connection signal="area_entered" from="." to="." method="_on_Card_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_Card_area_exited"]
