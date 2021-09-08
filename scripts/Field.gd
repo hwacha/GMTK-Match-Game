@@ -55,15 +55,11 @@ func _draw():
 func set_selected_card(card):
 	selected_card = card
 	if card:
-		_card_view.get_node("Attribute1").visible = true
-		_card_view.get_node("Attribute2").visible = true
-		_card_view.get_node("Attribute3").visible = true
+		_card_view.visible = true
 		_card_view.get_node("Sprite").set_texture(card.get_node("Face").get_texture())
 		update()
 	else:
-		_card_view.get_node("Attribute1").visible = false
-		_card_view.get_node("Attribute2").visible = false
-		_card_view.get_node("Attribute3").visible = false
+		_card_view.visible = false
 		_card_view.get_node("Sprite").set_texture(null)
 		update()
 
