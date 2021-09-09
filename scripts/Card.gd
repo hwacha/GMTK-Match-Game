@@ -1,54 +1,45 @@
 extends Area2D
 
+const PersonData = preload("res://scripts/PersonData.gd")
+const Icon = preload("res://scripts/Icon.gd")
+
+const Posjamb = preload("res://prefabs/PosJamb.tscn")
+
+
 var stats = {
-	'left': [0, 0, 0],
-	'right': [0, 0, 0],
-	'up': [0, 0, 0],
-	'down': [0, 0, 0],
+	'left': [0, 0],
+	'right': [0, 0],
 }
 
-var attributes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+var person_data: PersonData = null
 
-var icons = [0, 0, 0, 0]
 
 var offsets = {
 	'left': {
 		'neu' : Vector2(40, 26),
 		'pos' : Vector2(47, 26)
 	},
-	'up': {
-		'neu' : Vector2(26, -72),
-		'pos' : Vector2(26, -79),
-	},
 	'right': {
 		'neu' : Vector2(-40, 26),
 		'pos' : Vector2(-47, 26)
-	},
-	'down': {
-		'neu' : Vector2(26, 72),
-		'pos' : Vector2(26, 79),
 	},
 }
 
 var rotations = {
 	'left': 180,
 	'right': 0,
-	'up': 90,
-	'down': -90
 }
 
 var target_pair = {
 	'card': null,
-	'dir': 'up',
+	'dir': 'left',
 }
 
-var dir_map = ['up', 'left', 'right', 'down']
+var dir_map = ['left', 'right']
 
 var dir_pairs = {
 	'left' : 'right',
 	'right': 'left',
-	'up': 'down',
-	'down': 'up',
 }
 
 var pair_state = 'unpaired'
@@ -60,74 +51,56 @@ onready var textlabel = get_node("LabelContainer/Label")
 onready var face = get_node("Face")
 onready var base = get_node("Base")
 
-var wriggle = false
-var wriggle_degrees = 0
-var wriggle_right = false
+var wobble = false
+var wobble_degrees = 0
+var wobble_right = false
 var target = 10
 
 func _ready():
-	var card_data = field.get_node('CardData')
-	face.set_texture(card_data.new_sprite_texture())
-	textlabel.text = card_data.new_name()
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	for i in range(0, len(icons)):
-		print(icons)
-		var cand = rng.randi_range(1, 41)
-		while icons.has(cand):
-			cand = rng.randi_range(1, 41)
-		icons[i] = cand
-
-	var neujamb_prefab = load("res://prefabs/NeuJamb.tscn")
-	var posjamb_prefab = load("res://prefabs/PosJamb.tscn")
+	pass
 	
+	
+	
+func load_person_data(pd: PersonData):
+	person_data = pd
+	stats = pd.stats
+	face.texture = pd.face_id
+	textlabel.text = pd.first_name
+
 	for dir in ['left', 'right']:
 		for i in range(0, len(stats[dir])):
-			var jamb = null
-			var offset = null
-			
-			if stats[dir][i] == 0:
-				jamb = neujamb_prefab.instance()
-				offset = offsets[dir]['neu']
 			if stats[dir][i] == 1:
-				jamb = posjamb_prefab.instance()
-				offset = offsets[dir]['pos']
-			if stats[dir][i] in [0, 1]:
+				var jamb = Posjamb.instance()
+				var offset = offsets[dir]['pos']
+
 				jamb.rotation_degrees = rotations[dir]
-				if dir in ['left', 'right']:
-					jamb.transform.origin.x = offset.x
-					jamb.transform.origin.y = offset.y - offset.y * i
-				else:
-					jamb.transform.origin.x = offset.x - offset.x * i
-					jamb.transform.origin.y = offset.y
+				jamb.transform.origin.x = offset.x
+				jamb.transform.origin.y = offset.y - offset.y * 2 * i
 				jamb.z_index = 1
 				self.interjambs.add_child(jamb)
-	var i = 0
-	for icon in $Icons.get_children():
-		icon.animation = str(icons[i])
-		i = i + 1
+
+	var icons = $Icons.get_children()
+	for i in range(0, len(icons)):
+		icons[i].set_icon(pd.icon_ids[i])
+		icons[i].set_color(pd.like_mask[i])
 		
-	
-var colors = [
-	Color(0.85, 0.85, 0.7, 1),
-]
 
 func _process(delta):
 	#self.rotation += 5 * delta
-	if wriggle:
+	if wobble:
 		var speed = 100
-		var vel = -1 * speed if wriggle_right else 1 * speed
-		wriggle_degrees += vel * delta
-		if (target > 0 and wriggle_degrees > target) or (target <= 0 and wriggle_degrees < target):
+		var vel = -1 * speed if wobble_right else 1 * speed
+		wobble_degrees += vel * delta
+		if (target > 0 and wobble_degrees > target) or (target <= 0 and wobble_degrees < target):
 			target = -1 * target
-			wriggle_right = not wriggle_right
-	#rotation_degrees = wriggle_degrees
-	interjambs.rotation_degrees = wriggle_degrees
-	face.rotation_degrees = wriggle_degrees
-	base.rotation_degrees = wriggle_degrees
-	$Stats.rotation_degrees = wriggle_degrees
-	$Icons.rotation_degrees = wriggle_degrees
-	$LabelContainer.rotation_degrees = wriggle_degrees
+			wobble_right = not wobble_right
+	#rotation_degrees = wobble_degrees
+	interjambs.rotation_degrees = wobble_degrees
+	face.rotation_degrees = wobble_degrees
+	base.rotation_degrees = wobble_degrees
+	$Stats.rotation_degrees = wobble_degrees
+	$Icons.rotation_degrees = wobble_degrees
+	$LabelContainer.rotation_degrees = wobble_degrees
 	#set_color(colors[0])
 	var right_boundary = 1024
 	var pair_zone_boundary = right_boundary - 135 - 200
@@ -206,8 +179,8 @@ func _on_Boundaries_area_shape_entered(area_id, area, area_shape, local_shape):
 			target_pair['card'] = area.get_parent()
 			if prev_target != target_pair['card'] and can_pair():
 				if prev_target != null:
-					prev_target.stop_wriggle()
-				target_pair['card'].start_wriggle()
+					prev_target.stop_wobble()
+				target_pair['card'].start_wobble()
 
 func set_color(color):
 	get_node('Base').modulate = color
@@ -220,9 +193,9 @@ func _on_Boundaries_area_shape_exited(area_id, area, area_shape, local_shape):
 	var their_dir = dir_map[area_shape]
 	if area != null:
 		var exited_card = area.get_parent()
-		if self == field.selected_card and exited_card and exited_card.wriggle:
+		if self == field.selected_card and exited_card and exited_card.wobble:
 			print("card ", self, 'left  area ', exited_card)
-			exited_card.stop_wriggle()
+			exited_card.stop_wobble()
 		if their_dir == dir_pairs[our_dir] and exited_card == target_pair['card']:
 			target_pair['dir'] = null
 			target_pair['card'] = null
@@ -243,7 +216,7 @@ func can_pair():
 		return false
 
 	var successful_pair = true
-	for i in range(0, 3):
+	for i in range(0, 2):
 		if stats[our_dir][i] + target.stats[their_dir][i] != 0:
 			successful_pair = false
 			break
@@ -278,14 +251,14 @@ func attempt_pair_with_target():
 		field.remove_child(self)
 		self.set_name('Child1')
 		self.z_index = 0
-		self.stop_wriggle()
+		self.stop_wobble()
 		pair_container.add_child(self)
 		field.max_z += 2
 		pair_container.z_index = field.max_z
 		field.remove_child(target)
 		target.set_name('Child2')
 		target.z_index = 0
-		target.stop_wriggle()
+		target.stop_wobble()
 		pair_container.add_child(target)
 		pair_container.pair_direction = our_dir
 		
@@ -349,19 +322,19 @@ func unpair():
 	queue_free()
 	field.set_selected_card(null)
 
-func start_wriggle():
+func start_wobble():
 	#return
-	print(textlabel.text + ' starts to wriggle')
-	wriggle = true
-	wriggle_degrees = 0
-	wriggle_right = false
+	print(textlabel.text + ' starts to wobble')
+	wobble = true
+	wobble_degrees = 0
+	wobble_right = false
 	target = 10
 	
 	
-func stop_wriggle():
+func stop_wobble():
 	#return
 	print(textlabel.text + ' stops wriggling')
-	wriggle = false
-	wriggle_degrees = 0
-	wriggle_right = false
+	wobble = false
+	wobble_degrees = 0
+	wobble_right = false
 	target = 10

@@ -1,16 +1,27 @@
 extends Node2D
 
 
-var icon_count = 41
 
-var item_type = null
+const COLOR_LIKE = Color(0, 255, 0, 100)
+const COLOR_HATE = Color(255, 0, 0, 100)
+const COLOR_NEUTRAL = Color(0, 0, 0, 0)
 
+onready var ColorRect = $ColorRect
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	item_type = rng.randi_range(1, 42)
-	get_node("AnimatedSprite").animation = str(item_type)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func set_color(color: int):
+	match color:
+		0:
+			ColorRect.color = COLOR_HATE
+		1:
+			ColorRect.color = COLOR_LIKE
+		_:
+			ColorRect.color = COLOR_NEUTRAL
+
+
+func set_icon(icon: int):
+	self.animation = str(icon)

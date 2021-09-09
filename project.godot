@@ -8,16 +8,21 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Reference",
+"class": "PersonData",
+"language": "GDScript",
+"path": "res://scripts/PersonData.gd"
+} ]
+_global_script_class_icons={
+"PersonData": ""
+}
+
 [application]
 
 config/name="gmtk_match_game"
 run/main_scene="res://prefabs/Field.tscn"
 config/icon="res://icon.png"
-
-[display]
-
-window/stretch/mode="viewport"
-window/stretch/aspect="keep"
 
 [importer_defaults]
 
