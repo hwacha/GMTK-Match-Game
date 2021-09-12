@@ -15,20 +15,21 @@ var age = 28
 var bio = 'Hi! This is my dating profile :)'
 
 func _init(
-	stats=null,
-	icon_ids=null,
-	like_mask=null,
-	face_id=null,
-	first_name=null,
-	gender=null,
-	age=null,
-	bio=null
+	_stats=null,
+	_icon_ids=null,
+	_like_mask=null,
+	_face_id=null,
+	_first_name=null,
+	_gender=null,
+	_age=null,
+	_bio=null
 ):
-	stats = stats
-	icon_ids = icon_ids
-	like_mask = like_mask
-	face_id = face_id
-	gender = gender
-	age = age
-	bio = bio
+	stats = _stats
+	icon_ids = _icon_ids
+	like_mask = _like_mask
+	face_id = _face_id
+	first_name = _first_name
+	gender = _gender
+	age = _age
+	bio = _bio
 	

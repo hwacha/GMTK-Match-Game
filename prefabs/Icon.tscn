@@ -382,6 +382,7 @@ playing = true
 script = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
 margin_left = -16.0
 margin_top = -16.0
 margin_right = 16.0

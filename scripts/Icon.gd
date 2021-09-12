@@ -2,8 +2,8 @@ extends Node2D
 
 
 
-const COLOR_LIKE = Color(0, 255, 0, 100)
-const COLOR_HATE = Color(255, 0, 0, 100)
+const COLOR_LIKE = Color(0, 1, 0, 0.35)
+const COLOR_HATE = Color(1, 0, 0, 0.35)
 const COLOR_NEUTRAL = Color(0, 0, 0, 0)
 
 onready var ColorRect = $ColorRect
