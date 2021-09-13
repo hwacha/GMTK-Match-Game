@@ -36,12 +36,7 @@ func _ready():
 
 	var num_reservoir = 6
 	for n in range(num_reservoir):
-		var card = Card.instance()
-		max_z += 2
-		card.z_index = max_z
-		$Reservoir.add_card(card)
-		var pd = person_factory.new_person_data()
-		card.load_person_data(pd)
+		add_card_to_reservoir()
 
 
 func set_selected_card(card):
@@ -59,7 +54,14 @@ func set_selected_card(card):
 	else:
 		_card_view.visible = false
 
-
+func add_card_to_reservoir():
+	var card = Card.instance()
+	max_z += 2
+	card.z_index = max_z
+	$Reservoir.add_card(card)
+	var pd = person_factory.new_person_data()
+	card.load_person_data(pd)
+		
 func _process(delta):
 	if Input.is_action_just_pressed("ui_up"):
 		get_tree().change_scene("res://prefabs/Field.tscn")

@@ -1,18 +1,48 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/Reservoir.gd" type="Script" id=2]
 
+[sub_resource type="StyleBoxFlat" id=1]
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.25098, 0.25098, 0.25098, 1 )
+anti_aliasing = false
+
 [node name="Reservoir" type="Node2D"]
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Cards" type="Node2D" parent="."]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchor_left = 0.5
+anchor_top = 0.0019547
+anchor_right = 0.5
+anchor_bottom = 0.0019547
+margin_left = 16.0
+margin_top = 10.776
+margin_right = 218.0
+margin_bottom = 40.2082
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ColorRect" type="ColorRect" parent="."]
 show_behind_parent = true
-margin_right = 202.0
+margin_right = 234.0
 margin_bottom = 397.0
 mouse_filter = 2
-color = Color( 0, 0, 0, 1 )
+color = Color( 0.811765, 0.901961, 0.92549, 1 )
 __meta__ = {
+"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
