@@ -18,7 +18,6 @@ const duration = 5
 var progress = 100
 var waiting_for_card = false
 
-
 func _ready():
 	pass
 
@@ -50,7 +49,7 @@ func update_positions():
 		
 
 func _process(delta):
-	print(progress, waiting_for_card)
+	#print(progress, waiting_for_card)
 	progress = min(100, progress +  100 * delta / duration)
 	$ProgressBar.value = progress
 	

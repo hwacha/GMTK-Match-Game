@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/PersonFactory.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Field.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://prefabs/PersonViewer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://mukta32.tres" type="DynamicFont" id=5]
 [ext_resource path="res://prefabs/Reservoir.tscn" type="PackedScene" id=6]
+[ext_resource path="res://prefabs/PairViewer.tscn" type="PackedScene" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 144, 125 )
@@ -52,9 +53,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CardViewer" parent="." instance=ExtResource( 4 )]
+[node name="PersonViewer" parent="." instance=ExtResource( 4 )]
 visible = false
-position = Vector2( 879.629, 195.355 )
+position = Vector2( 879.629, 192 )
+
+[node name="PairViewer" parent="." instance=ExtResource( 7 )]
+visible = false
+position = Vector2( 879.629, 192 )
 
 [node name="PersonFactory" type="Node2D" parent="."]
 script = ExtResource( 1 )

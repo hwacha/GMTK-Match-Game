@@ -7,7 +7,8 @@ const Card = preload("res://prefabs/Card.tscn")
 var selected_card = null
 
 #onready var card_manager = get_node("CardManager")
-onready var _card_view = get_node("CardViewer")
+onready var _card_view = get_node("PersonViewer")
+onready var _pair_view = get_node("PairViewer")
 onready var person_factory = get_node('PersonFactory')
 var rng = RandomNumberGenerator.new()
 
@@ -51,8 +52,14 @@ func set_selected_card(card):
 	if card and card.pair_state == card.PairState.UNPAIRED:
 		_card_view.load_person_data(card.person_data)
 		_card_view.visible = true
+		_pair_view.visible = false
+	elif card and card.pair_state == card.PairState.CONTAINER:
+		_pair_view.load_pair_data(card.get_node('Child1').person_data, card.get_node('Child2').person_data)
+		_card_view.visible = false
+		_pair_view.visible = true
 	else:
 		_card_view.visible = false
+		_pair_view.visible = false
 
 func add_card_to_reservoir():
 	var card = Card.instance()
