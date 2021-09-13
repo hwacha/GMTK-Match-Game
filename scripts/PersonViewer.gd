@@ -14,7 +14,6 @@ const icon_offset = 35
 
 func load_person_data(pd: PersonData):
 	
-	
 	for child in $HateContainer.get_children():
 		$HateContainer.remove_child(child)
 

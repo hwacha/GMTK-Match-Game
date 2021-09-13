@@ -5,6 +5,8 @@ const Icon = preload("res://scripts/Icon.gd")
 
 const Posjamb = preload("res://prefabs/PosJamb.tscn")
 
+enum PairState {RESERVOIR, UNPAIRED, PAIRED, CONTAINER}
+
 
 var stats = {
 	'left': [0, 0],
@@ -42,7 +44,8 @@ var dir_pairs = {
 	'right': 'left',
 }
 
-var pair_state = 'unpaired'
+var pair_state = PairState.UNPAIRED
+
 var pair_direction = null
 
 onready var interjambs = get_node("Interjambs")
@@ -58,8 +61,6 @@ var target = 10
 
 func _ready():
 	pass
-	
-	
 	
 func load_person_data(pd: PersonData):
 	person_data = pd
@@ -105,16 +106,16 @@ func _process(delta):
 	var right_boundary = 1024
 	var pair_zone_boundary = right_boundary - 135 - 200
 	if (field.selected_card == self):
-		if pair_state in ['pair_container', 'unpaired']:
+		if pair_state in [PairState.CONTAINER, PairState.UNPAIRED]:
 			set_position(get_viewport().get_mouse_position())
-			if pair_state == 'unpaired':
+			if pair_state == PairState.UNPAIRED:
 				set_position(Vector2(min(transform.origin.x, pair_zone_boundary), transform.origin.y))
 		else:
 			pass
 
 # TODO move pair zone code to here.
 func _on_Card_input_event(viewport, event, shape_idx):
-	if pair_state == 'paired':
+	if pair_state == PairState.PAIRED:
 		return
 	if event is InputEventMouseButton: # mouse has happened in the frame
 		if event.button_index == BUTTON_LEFT:
@@ -140,13 +141,13 @@ func _on_Card_input_event(viewport, event, shape_idx):
 						z_index = local_max_z + 2
 					field.max_z = max(z_index, field.max_z)
 					
-					if pair_state == 'pair_container' and in_pairzone:
+					if pair_state == PairState.CONTAINER and in_pairzone:
 						complete_pair()
-					if pair_state == 'unpaired' and target_pair['card'] != null and target_pair['card'].pair_state == 'unpaired':
+					if pair_state == PairState.UNPAIRED and target_pair['card'] != null and target_pair['card'].pair_state == PairState.UNPAIRED:
 						attempt_pair_with_target()
 					field.set_selected_card(null)
 		if event.button_index == BUTTON_RIGHT:
-			if event.is_pressed() and pair_state == 'pair_container':
+			if event.is_pressed() and pair_state == PairState.CONTAINER:
 				unpair()
 
 func is_colliding(point):
@@ -194,7 +195,7 @@ func _on_Boundaries_area_shape_exited(area_id, area, area_shape, local_shape):
 	if area != null:
 		var exited_card = area.get_parent()
 		if self == field.selected_card and exited_card and exited_card.wobble:
-			print("card ", self, 'left  area ', exited_card)
+			#print("card ", self, 'left  area ', exited_card)
 			exited_card.stop_wobble()
 		if their_dir == dir_pairs[our_dir] and exited_card == target_pair['card']:
 			target_pair['dir'] = null
@@ -212,7 +213,7 @@ func can_pair():
 	if not target:
 		return false
 
-	if target.pair_state != 'unpaired' or target.pair_state != 'unpaired':
+	if pair_state != PairState.UNPAIRED or target.pair_state != PairState.UNPAIRED:
 		return false
 
 	var successful_pair = true
@@ -227,13 +228,13 @@ func attempt_pair_with_target():
 		var target = target_pair['card']
 		var our_dir = target_pair['dir']
 		var their_dir = dir_pairs[our_dir]
-		print('We attempt to pair ', self.name, ' ', 'from direction ' , target_pair['dir'], ' with ', target_pair['card'].name, ' ', 'from direction ' , dir_pairs[target_pair['dir']])
+		#print('We attempt to pair ', self.name, ' ', 'from direction ' , target_pair['dir'], ' with ', target_pair['card'].name, ' ', 'from direction ' , dir_pairs[target_pair['dir']])
 
-		pair_state = 'paired'
-		target.pair_state = 'paired'
+		pair_state = PairState.PAIRED
+		target.pair_state = PairState.PAIRED
 		var pair_container = load("res://prefabs/Card.tscn").instance()
 		pair_container.set_invisible()
-		pair_container.pair_state = 'pair_container'
+		pair_container.pair_state = PairState.CONTAINER
 		
 		# expand the bounding box to be 2x the normal size on the appropriate axis
 		var bounding_box = pair_container.get_node('Full')
@@ -315,7 +316,7 @@ func unpair():
 		remove_child(child)
 		var multiplier = 1 if name == 'Child1' else -1
 		child.transform.origin = child.transform.origin + transform.origin + offset * multiplier
-		child.pair_state = 'unpaired'
+		child.pair_state = PairState.UNPAIRED
 		field.add_child(child)
 		child.z_index = z_index
 	field.remove_child(self)
@@ -324,7 +325,7 @@ func unpair():
 
 func start_wobble():
 	#return
-	print(textlabel.text + ' starts to wobble')
+	#print(textlabel.text + ' starts to wobble')
 	wobble = true
 	wobble_degrees = 0
 	wobble_right = false
@@ -333,7 +334,7 @@ func start_wobble():
 	
 func stop_wobble():
 	#return
-	print(textlabel.text + ' stops wriggling')
+	#print(textlabel.text + ' stops wobbling')
 	wobble = false
 	wobble_degrees = 0
 	wobble_right = false

@@ -10,7 +10,7 @@ extents = Vector2( 47, 79 )
 
 [sub_resource type="StreamTexture" id=2]
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 23.5, 79 )
 
 [node name="Card" type="Area2D"]
@@ -82,14 +82,14 @@ __meta__ = {
 
 [node name="Right" type="CollisionShape2D" parent="Boundaries"]
 position = Vector2( 23.3749, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="Left" type="CollisionShape2D" parent="Boundaries"]
 position = Vector2( -23.5, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true
 }
