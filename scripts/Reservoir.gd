@@ -12,28 +12,26 @@ const col_offset_y = 15
 
 const cards_per_row = 2
 
-
-var cards = []
-
 func _ready():
 	pass
 
 func add_card(card):
 	card.pair_state = card.PairState.RESERVOIR
-	self.add_child(card)
+	$Cards.add_child(card)
 	self.update_positions() 
 
 func remove_card(card):
-	for c in self.get_children():
+	for c in $Cards.get_children():
+		print(c)
 		if c == card:
 			card.pair_state = card.PairState.UNPAIRED
-			self.remove_child(card)
+			$Cards.remove_child(card)
 			break
 	self.update_positions()
 		
 	
 func update_positions():
-	var child_cards = self.get_children()
+	var child_cards = $Cards.get_children()
 	for i in range(0, len(child_cards)):
 		var col = i % cards_per_row
 		var row = i / cards_per_row

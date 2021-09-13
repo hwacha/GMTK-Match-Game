@@ -106,9 +106,9 @@ func _process(delta):
 	var right_boundary = 1024
 	var pair_zone_boundary = right_boundary - 135 - 200
 	if (field.selected_card == self):
-		if pair_state in [PairState.CONTAINER, PairState.UNPAIRED]:
+		if pair_state in [PairState.CONTAINER, PairState.UNPAIRED, PairState.RESERVOIR]:
 			set_position(get_viewport().get_mouse_position())
-			if pair_state == PairState.UNPAIRED:
+			if pair_state in [PairState.UNPAIRED, PairState.RESERVOIR]:
 				set_position(Vector2(min(transform.origin.x, pair_zone_boundary), transform.origin.y))
 		else:
 			pass

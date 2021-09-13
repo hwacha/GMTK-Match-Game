@@ -4,3 +4,15 @@
 
 [node name="Reservoir" type="Node2D"]
 script = ExtResource( 2 )
+
+[node name="Cards" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+margin_right = 202.0
+margin_bottom = 397.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -47,7 +47,7 @@ func _ready():
 func set_selected_card(card):
 	selected_card = card
 	
-	if card and card.get_parent() == $Reservoir:
+	if card and card.pair_state == card.PairState.RESERVOIR:
 		var old_position = card.global_position
 		$Reservoir.remove_card(card)
 		self.add_child(card)
