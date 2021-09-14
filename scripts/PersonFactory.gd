@@ -1,18 +1,12 @@
 extends Node2D
 
 const PersonData = preload("res://scripts/PersonData.gd")
+const PersonConstants = preload("res://scripts/PersonConstants.gd")
 
+var sprite_array = []
 
-const sprite_array = [
-	preload("res://assets/pixel_faces/00238.png"),
-	preload("res://assets/pixel_faces/00365.png"),
-	preload("res://assets/pixel_faces/00995.png"),
-]
+const name_array = PersonConstants.names
 
-const name_array = [
-	"Alice",
-	"Bob"
-]
 
 #var past_names = []
 #var current_names = []
@@ -27,6 +21,10 @@ var rng = RandomNumberGenerator.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	for face_id in PersonConstants.faces:
+		var path = "res://assets/pixel_faces/%s.png" % face_id
+		sprite_array.append(load(path))
+
 	rng.randomize()
 	
 	
@@ -66,9 +64,9 @@ func new_person_data():
 
 	var icon_ids = [0, 0, 0, 0]
 	for i in range(0, len(icon_ids)):
-		var cand = rng.randi_range(1, 5)
+		var cand = rng.randi_range(1, 41)
 		while icon_ids.has(cand):
-			cand = rng.randi_range(1, 5)
+			cand = rng.randi_range(1, 41)
 		icon_ids[i] = cand 
 	
 	var num_likes = rng.randi_range(0, 4)
@@ -81,12 +79,11 @@ func new_person_data():
 	
 	var face_id = sprite_array[rng.randi_range(0, len(sprite_array) - 1)]
 	var first_name = name_array[rng.randi_range(0, len(name_array) - 1)]
-	
+	var bio = PersonConstants.bios[rng.randi_range(0, len(PersonConstants.bios) - 1)]
 	var gender = 'male'
-	var age = rng.randi_range(18, 49)
+	var age = rng.randi_range(21, 44)
 	
-	var bio = 'Kind of a mess but you know what that\'s fine'
-	
+
 	return PersonData.new(
 		stats,
 		icon_ids,

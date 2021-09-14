@@ -18,12 +18,12 @@ var reservoir_cards = []
 func _ready():
 	rng.randomize()
 	
-	var num_cards = 0
+	var num_cards = 20
 	for n in range(num_cards):
 		
 		var card = Card.instance()
-		var x = rng.randi_range(200, 700)
-		var y = rng.randi_range(200, 500)
+		var x = rng.randi_range(275, 680)
+		var y = rng.randi_range(100, 500)
 		card.set_position(Vector2(x, y))
 		card.z_index = 2 * n
 		# have to load the card into the scene before updating it's values

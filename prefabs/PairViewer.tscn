@@ -57,10 +57,10 @@ __meta__ = {
 }
 
 [node name="Differences" type="Label" parent="."]
-margin_left = -135.82
-margin_top = 40.0
-margin_right = 135.0
-margin_bottom = 52.0
+margin_left = -138.072
+margin_top = 39.5496
+margin_right = 132.748
+margin_bottom = 51.5496
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Differences:"
@@ -78,7 +78,6 @@ margin_bottom = 26.0
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "None"
-align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -93,7 +92,6 @@ margin_bottom = 80.0
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "None"
-align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false

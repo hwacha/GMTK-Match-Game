@@ -10,11 +10,17 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
+"class": "PersonConstants",
+"language": "GDScript",
+"path": "res://scripts/PersonConstants.gd"
+}, {
+"base": "Reference",
 "class": "PersonData",
 "language": "GDScript",
 "path": "res://scripts/PersonData.gd"
 } ]
 _global_script_class_icons={
+"PersonConstants": "",
 "PersonData": ""
 }
 
