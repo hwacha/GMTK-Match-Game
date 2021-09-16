@@ -11,7 +11,7 @@ const name_array = PersonConstants.names
 #var past_names = []
 #var current_names = []
 #var remaining_names = []
-#
+
 #var past_faces = []
 #var current_faces = []
 #var remaining_faces = []
@@ -82,7 +82,7 @@ func new_person_data():
 	var bio = PersonConstants.bios[rng.randi_range(0, len(PersonConstants.bios) - 1)]
 	var gender = 'male'
 	var age = rng.randi_range(21, 44)
-	
+	var rate = 0.5 + rng.randf_range(0, 1)
 
 	return PersonData.new(
 		stats,
@@ -92,7 +92,8 @@ func new_person_data():
 		first_name,
 		gender,
 		age,
-		bio
+		bio,
+		rate
 	)
 
 func new_sprite_texture():

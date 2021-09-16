@@ -13,6 +13,8 @@ var first_name = 'James'
 var gender = 'male'
 var age = 28
 var bio = ''
+var rate = 1
+var happiness = 100
 
 func _init(
 	_stats=null,
@@ -22,7 +24,8 @@ func _init(
 	_first_name=null,
 	_gender=null,
 	_age=null,
-	_bio=null
+	_bio=null,
+	_rate=null
 ):
 	stats = _stats
 	icon_ids = _icon_ids
@@ -32,7 +35,8 @@ func _init(
 	gender = _gender
 	age = _age
 	bio = _bio
-	
+	rate = _rate
+
 
 static func score_compatibility(pd: PersonData, pd2: PersonData) -> int:
 	var score = 0

@@ -2,6 +2,7 @@ extends Area2D
 
 signal card_entered(card_entered, card_entering)
 signal card_exited(card_exited, card_exiting)
+signal person_card_quit(card)
 
 const PersonData = preload("res://scripts/PersonData.gd")
 const Icon = preload("res://scripts/Icon.gd")
@@ -35,7 +36,7 @@ var stats = {
 
 var person_data: PersonData = null
 var pair_state = PairState.UNPAIRED
-
+var global_rate = 2.0
 
 onready var interjambs = get_node("Interjambs")
 onready var textlabel = get_node("LabelContainer/Label")
@@ -46,6 +47,8 @@ var wobble = false
 var wobble_degrees = 0
 var wobble_right = false
 var target = 10
+
+
 
 func _ready():
 	pass
@@ -83,6 +86,7 @@ func load_person_data(pd: PersonData):
 		icons[i].set_icon(pd.icon_ids[i])
 		icons[i].set_color(pd.like_mask[i])
 		
+	$ProgressBar.value = pd.happiness
 
 func _process(delta):
 	#self.rotation += 5 * delta
@@ -99,7 +103,15 @@ func _process(delta):
 	base.rotation_degrees = wobble_degrees
 	$Icons.rotation_degrees = wobble_degrees
 	$LabelContainer.rotation_degrees = wobble_degrees
-
+	
+	
+	person_data.happiness = person_data.happiness -  delta * global_rate * person_data.rate
+	$ProgressBar.value = person_data.happiness
+	if person_data.happiness <= 0:
+		emit_signal("person_card_quit", self)
+	
+	
+	
 func _on_Card_area_entered(area):
 	pass
 	

@@ -22,31 +22,45 @@ var rng = RandomNumberGenerator.new()
 
 var prev_mouse_pos = null
 
+var graveyard = []
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	rng.randomize()
 	
 	var num_cards = 20
 	for n in range(num_cards):
-		
-		var card = _Card.instance()
-		var x = rng.randi_range(275, 680)
-		var y = rng.randi_range(100, 500)
-		card.set_position(Vector2(x, y))
-		card.z_index = 2 * n
-		# have to load the card into the scene before updating it's values
-		# kinda weird! feel like there should be a better way to do this
-		add_child(card)
-
-		var pd = person_factory.new_person_data()
-		card.load_person_data(pd)
-		card.connect("card_entered", self, "_card_entered")
-		card.connect("card_exited", self, "_card_exited")
-	max_z = 2 * num_cards
+		add_card_to_field()
 
 	var num_reservoir = 6
 	for n in range(num_reservoir):
 		add_card_to_reservoir()
+
+func _finish_add_card(card):
+	var pd = person_factory.new_person_data()
+	card.load_person_data(pd)
+	card.connect("card_entered", self, "_card_entered")
+	card.connect("card_exited", self, "_card_exited")
+	card.connect("person_card_quit", self, "_person_card_quit")
+	max_z += 2
+	card.z_index = max_z
+
+func add_card_to_field():
+	var card = _Card.instance()
+	# have to load the card into the scene before updating it's values
+	# kinda weird! feel like there should be a better way to do this
+	add_child(card)
+	
+	_finish_add_card(card)
+
+	var x = rng.randi_range(275, 680)
+	var y = rng.randi_range(100, 500)
+	card.set_position(Vector2(x, y))
+
+func add_card_to_reservoir():
+	var card = _Card.instance()
+	$Reservoir.add_card(card)
+	_finish_add_card(card)
 
 
 func set_selected_card(card):
@@ -101,16 +115,6 @@ func update_view_card(card):
 		_card_view.visible = false
 		_pair_view.visible = false
 
-func add_card_to_reservoir():
-	var card = _Card.instance()
-	max_z += 2
-	card.z_index = max_z
-	$Reservoir.add_card(card)
-	var pd = person_factory.new_person_data()
-	card.load_person_data(pd)
-	card.connect("card_entered", self, "_card_entered")
-	card.connect("card_exited", self, "_card_exited")
-		
 func _process(delta):
 	if Input.is_action_just_pressed("ui_up"):
 		get_tree().change_scene("res://prefabs/Field.tscn")
@@ -139,7 +143,7 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed('mouse_right'):
 		if view_card and view_card.pair_state == Card.PairState.CONTAINER:
-			unpair_selected()
+			unpair(view_card)
 
 	# note: we're relying on a physics proccess, which means it could get a
 	# frame out of sync. seems responsive enough for now.
@@ -202,9 +206,9 @@ func pair_selected_with_target():
 
 const unpair_offset = Vector2(11, 0)
 
-func unpair_selected():
-	assert(view_card.pair_state == Card.PairState.CONTAINER)
-	var pair_container = view_card
+func unpair(pair_container):
+	var was_view = (pair_container == view_card)
+
 	for card in [pair_container.target, pair_container.selected]:
 		var original_pos = card.global_position
 		pair_container.remove_child(card)
@@ -220,8 +224,9 @@ func unpair_selected():
 
 	self.remove_child(pair_container)
 	pair_container.queue_free()
-	set_selected_card(null)
-	update_view_card(null)
+	if was_view:
+		set_selected_card(null)
+		update_view_card(null)
 
 func submit_pair():
 	var pair_container = selected_card
@@ -274,7 +279,24 @@ func _card_entered(entered, entering):
 
 func _on_PairZone_area_entered(area):
 	in_pairzone = true
-		
 
 func _on_PairZone_area_exited(area):
 	in_pairzone = false
+
+func _person_card_quit(card):
+	var pd = card.person_data
+	process_death(pd)
+	match card.pair_state:
+		Card.PairState.RESERVOIR:
+			$Reservoir.remove_card(card)
+		Card.PairState.PAIRED:
+			var pair_container = card.get_parent()
+			unpair(pair_container)
+			self.remove_child(card)
+		Card.PairState.UNPAIRED:
+			self.remove_child(card)
+	
+
+func process_death(pd):
+	score -= 100
+	$Score.text = str(score)
