@@ -12,6 +12,9 @@ var view_card = null
 var target_card = null
 var target_direction = null
 
+var in_pairzone = false
+var score = 0
+
 onready var _card_view = get_node("PersonViewer")
 onready var _pair_view = get_node("PairViewer")
 onready var person_factory = get_node('PersonFactory')
@@ -134,7 +137,10 @@ func _process(delta):
 	if Input.is_action_just_released('mouse_left'):
 		if target_card != null:
 			pair_selected_with_target()
+		elif in_pairzone and selected_card.pair_state == Card.PairState.CONTAINER:
+			submit_pair()
 		set_selected_card(null)
+		update_view_card(null)
 	
 	if Input.is_action_just_pressed('mouse_right'):
 		if view_card and view_card.pair_state == Card.PairState.CONTAINER:
@@ -158,47 +164,6 @@ func update_target(new_target,  direction):
 	target_card = new_target
 	if target_card:
 		target_card.set_color(Color(0.8, 0.2, 0, 1))
-	
-
-func _card_exited(exited, exiting):
-
-	if exited == exiting:
-		return
-	
-	if  not (selected_card in [exited, exiting]):
-		return
-
-	var new_target = null
-	if selected_card == exited:
-		new_target = exiting
-	else:
-		new_target = exited
-	
-	if new_target == target_card:
-		#print('target released: %s', target_card.person_data.first_name)
-		update_target(null, null)
-
-	
-func _card_entered(entered, entering):
-	#print('cards %s, %s' % [entered, entering])
-
-	if not selected_card in [entered, entering]:
-		return
-	var direction = null
-	var new_target = null
-	if selected_card == entered:
-		new_target = entering
-		direction = 'right'
-	else:
-		new_target = entered
-		direction = 'left'
-		
-	print('potential target: %s from %s' % [new_target.person_data.first_name, direction])
-	if selected_card.can_pair(new_target, direction):
-		update_target(new_target, direction)
-		print('new target: %s', target_card.person_data.first_name)
-	else:
-		print('pair failed!')
 
 
 func pair_selected_with_target():
@@ -241,7 +206,6 @@ func pair_selected_with_target():
 	update_view_card(null)
 
 
-
 const unpair_offset = Vector2(11, 0)
 
 func unpair_selected():
@@ -265,3 +229,64 @@ func unpair_selected():
 	set_selected_card(null)
 	update_view_card(null)
 	
+
+
+func submit_pair():
+	var pair_container = selected_card
+	assert(pair_container.pair_state == Card.PairState.CONTAINER)
+	set_selected_card(null)
+	update_view_card(null)
+	
+	var pd1 = pair_container.selected.person_data
+	var pd2 = pair_container.target.person_data
+	var compatibility = PersonData.score_compatibility(pd1, pd2)
+	
+	score +=  10 * (compatibility + 4) * (compatibility + 4)
+	$Score.text = str(score) 
+	pair_container.queue_free()
+	
+
+## Handle Signals
+
+func _card_exited(exited, exiting):
+	assert(exited != exiting)
+	if  not (selected_card in [exited, exiting]):
+		return
+
+	var new_target = null
+	if selected_card == exited:
+		new_target = exiting
+	else:
+		new_target = exited
+	
+	if new_target == target_card:
+		#print('target released: %s', target_card.person_data.first_name)
+		update_target(null, null)
+	
+func _card_entered(entered, entering):
+	#print('cards %s, %s' % [entered, entering])
+	assert(entering != entered)
+	if not selected_card in [entered, entering]:
+		return
+	var direction = null
+	var new_target = null
+	if selected_card == entered:
+		new_target = entering
+		direction = 'right'
+	else:
+		new_target = entered
+		direction = 'left'
+		
+	print('potential target: %s from %s' % [new_target.person_data.first_name, direction])
+	if selected_card.can_pair(new_target, direction):
+		update_target(new_target, direction)
+		print('new target: %s', target_card.person_data.first_name)
+	else:
+		print('pair failed!')
+
+func _on_PairZone_area_entered(area):
+	in_pairzone = true
+		
+
+func _on_PairZone_area_exited(area):
+	in_pairzone = false

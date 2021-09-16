@@ -33,14 +33,14 @@ func _init(
 	age = _age
 	bio = _bio
 	
-#
-#static func score_compatibility(pd: PersonData, pd2: PersonData) -> int:
-#	var score = 0
-#	for i in range(0, len(pd.icons)):
-#		var j = pd2.find(pd.icons[i])
-#		if j != -1:
-#			if pd.like_mask[i] == pd2.like_mask[j]:
-#				score += 1
-#			else:
-#				score -= 1
-#	return score
+
+static func score_compatibility(pd: PersonData, pd2: PersonData) -> int:
+	var score = 0
+	for i in range(0, len(pd.icon_ids)):
+		var j = pd2.icon_ids.find(pd.icon_ids[i])
+		if j != -1:
+			if pd.like_mask[i] == pd2.like_mask[j]:
+				score += 1
+			else:
+				score -= 1
+	return score
