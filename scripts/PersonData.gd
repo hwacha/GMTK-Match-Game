@@ -12,7 +12,7 @@ var face_id = null
 var first_name = 'James'
 var gender = 'male'
 var age = 28
-var bio = 'Hi! This is my dating profile :)'
+var bio = ''
 
 func _init(
 	_stats=null,
