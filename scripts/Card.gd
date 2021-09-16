@@ -132,18 +132,9 @@ func set_invisible():
 	get_node('Stats').visible = true
 
 
-#func complete_pair():
-#	field.set_selected_card(null)
-#	self.queue_free()
-#	var total = 0
-#	for jamb in get_node("Child1").stats[pair_direction]:
-#		total += abs(jamb)
-#
-#	get_parent().get_node("Score").score += 100 * total
 
 func start_wobble():
-	#return
-	#print(textlabel.text + ' starts to wobble')
+
 	wobble = true
 	wobble_degrees = 0
 	wobble_right = false
@@ -151,8 +142,7 @@ func start_wobble():
 	
 	
 func stop_wobble():
-	#return
-	#print(textlabel.text + ' stops wobbling')
+
 	wobble = false
 	wobble_degrees = 0
 	wobble_right = false

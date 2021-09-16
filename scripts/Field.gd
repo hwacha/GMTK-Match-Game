@@ -12,7 +12,6 @@ var view_card = null
 var target_card = null
 var target_direction = null
 
-#onready var card_manager = get_node("CardManager")
 onready var _card_view = get_node("PersonViewer")
 onready var _pair_view = get_node("PairViewer")
 onready var person_factory = get_node('PersonFactory')
@@ -51,8 +50,8 @@ func _ready():
 
 
 func set_selected_card(card):
-	if card != null:
-		print('so this is getting called again huh')
+	assert(not card or card.pair_state != Card.PairState.PAIRED)
+
 	if selected_card != card:
 		update_target(null, null)
 
@@ -66,19 +65,6 @@ func set_selected_card(card):
 			card.global_position = old_position
 		max_z += 2
 		card.z_index = max_z
-	# right now RESERVOIR will be updated to UNPAIRED so this will hit then too
-#
-#	if card and card.pair_state == card.PairState.UNPAIRED:
-#		_card_view.load_person_data(card.person_data)
-#		_card_view.visible = true
-#		_pair_view.visible = false
-#	elif card and card.pair_state == card.PairState.CONTAINER:
-#		_pair_view.load_pair_data(card.get_node('Child1').person_data, card.get_node('Child2').person_data)
-#		_card_view.visible = false
-#		_pair_view.visible = true
-#	else:
-#		_card_view.visible = false
-#		_pair_view.visible = false
 
 func pull_for_view_card():
 		var intersections = get_world_2d().get_direct_space_state().intersect_point(get_viewport().get_mouse_position(), 32, [], 1, false, true)
@@ -93,6 +79,7 @@ func pull_for_view_card():
 		update_view_card(selected)
 	
 func update_view_card(card):
+	
 	view_card = card
 
 	if card and card.pair_state in [Card.PairState.UNPAIRED, Card.PairState.RESERVOIR]:
@@ -142,8 +129,8 @@ func _process(delta):
 		set_selected_card(null)
 	
 	if Input.is_action_just_pressed('mouse_right'):
-		if selected_card and selected_card.pair_state == Card.PairState.CONTAINER:
-			selected_card.unpair()
+		if view_card and view_card.pair_state == Card.PairState.CONTAINER:
+			unpair_selected()
 
 	# note, because of this: right now, it's possible we could somehow click before we have something as our selected card
 	# plausible but I think it's fine for now
@@ -151,49 +138,7 @@ func _process(delta):
 	if not selected_card: #and mouse_position != prev_mouse_pos:
 		pull_for_view_card()
 	prev_mouse_pos = mouse_position
-				
-	#elif Input.is_action_just_pressed('mouse_right')
-		
-#	if pair_state == PairState.PAIRED:
-#		return
-#	if event is InputEventMouseButton: # mouse has happened in the frame
-#		if event.button_index == BUTTON_LEFT:
-#			var overlapping =  get_overlapping_areas()
-#			var point = event.position
-#			var local_max_z = z_index
-#			var in_pairzone = false
-#			for area in overlapping:
-#				if area.name == "PairZone":
-#					in_pairzone = true
-#				if area.get_script() == get_script() and area.z_index > local_max_z and area.is_colliding(point):
-#					local_max_z = area.z_index
-#
-#			if event.is_pressed():
-#				if z_index == local_max_z:
-#					field.set_selected_card(self)
-#					event
-#					z_index = field.max_z + 2
-#
-#			else: # released
-#				if field.selected_card == self:
-#					if z_index < local_max_z:
-#						z_index = local_max_z + 2
-#					field.max_z = max(z_index, field.max_z)
-#
-#					if pair_state == PairState.CONTAINER and in_pairzone:
-#						complete_pair()
-#					if pair_state == PairState.UNPAIRED and target_pair['card'] != null and target_pair['card'].pair_state == PairState.UNPAIRED:
-#						attempt_pair_with_target()
-#					field.set_selected_card(null)
-#		if event.button_index == BUTTON_RIGHT:
-#			if event.is_pressed() and pair_state == PairState.CONTAINER:
-#				unpair()
-#
-#
-#update
-#
-#
-#
+
 
 func update_target(new_target,  direction):
 	target_direction = direction
@@ -246,14 +191,10 @@ func _card_entered(entered, entering):
 		print('pair failed!')
 
 
-#func _on_Reservoir_input_event(viewport, event, shape_idx):
-#	if event is InputEventMouseButton: # mouse has happened in the frame
-#		if event.button_index == BUTTON_LEFT:
-#			if event.is_pressed():
-#				 print('press recieved')
-
-
 func pair_selected_with_target():
+	assert(selected_card.pair_state == Card.PairState.UNPAIRED)
+	assert(target_card.pair_state == Card.PairState.UNPAIRED)
+
 	var curr_target = target_card
 	var curr_direction = target_direction
 	var curr_selected = selected_card
@@ -268,7 +209,7 @@ func pair_selected_with_target():
 	
 	# this stuff is absolutely fucked. when we remove the target card,
 	# we trigger a exit event, unsetting our target and direction
-
+	
 	curr_target.z_index = 0
 	curr_selected.z_index = 0
 	self.remove_child(curr_target)
@@ -284,17 +225,33 @@ func pair_selected_with_target():
 	elif curr_direction == 'left':
 		selected_card.position = -1 * side_offset
 		curr_target.position =  side_offset
-	#print(pair_container, curr_target)
+
 	pair_container.complete_pair(curr_target, curr_selected, curr_direction)
 	set_selected_card(null)
 	update_view_card(null)
-	#pull_for_view_card()
 
 
-var unpair_offset = 22 / 2
 
-var unpair_offsets = {
-	'right': Vector2(unpair_offset, 0),
-	'left': Vector2(-1 * unpair_offset, 0),
-}
+const unpair_offset = Vector2(11, 0)
 
+func unpair_selected():
+	assert(view_card.pair_state == Card.PairState.CONTAINER)
+	var pair_container = view_card
+	for card in [pair_container.target, pair_container.selected]:
+		var original_pos = card.global_position
+		pair_container.remove_child(card)
+
+		var multiplier = 1 if card == pair_container.selected else -1
+		if pair_container.direction == 'right':
+			multiplier = -1 if card == pair_container.selected else 1
+
+		card.global_position = original_pos + unpair_offset * multiplier
+		card.pair_state = Card.PairState.UNPAIRED
+		self.add_child(card)
+		card.z_index = max_z
+
+	self.remove_child(pair_container)
+	pair_container.queue_free()
+	set_selected_card(null)
+	update_view_card(null)
+	
