@@ -76,21 +76,29 @@ func pull_for_view_card():
 				if object.z_index > local_max_z_index:
 					selected = object
 					local_max_z_index = object.z_index
-		update_view_card(selected)
+		return selected
 	
 func update_view_card(card):
-	
 	view_card = card
-
-	if card and card.pair_state in [Card.PairState.UNPAIRED, Card.PairState.RESERVOIR]:
+	
+	# new case: when we have the card selected, and have a target, we show both
+	if card and card == selected_card and target_card:
+		_pair_view.load_pair_data(selected_card.person_data, target_card.person_data)
+		_card_view.visible = false
+		_pair_view.visible = true
+	
+	#  single card hover/selected
+	elif card and card.pair_state in [Card.PairState.UNPAIRED, Card.PairState.RESERVOIR]:
 		_card_view.load_person_data(card.person_data)
 		_card_view.visible = true
 		_pair_view.visible = false
-
+	
+	# pair hover/selected
 	elif card and card.pair_state == Card.PairState.CONTAINER:
 		_pair_view.load_pair_data(card.target.person_data, card.selected.person_data)
 		_card_view.visible = false
 		_pair_view.visible = true
+	# nothing under mouse
 	else:
 		_card_view.visible = false
 		_pair_view.visible = false
@@ -136,7 +144,9 @@ func _process(delta):
 	# plausible but I think it's fine for now
 	# TODO: remove the frame of lag
 	if not selected_card: #and mouse_position != prev_mouse_pos:
-		pull_for_view_card()
+		update_view_card(pull_for_view_card())
+	else:
+		update_view_card(selected_card)
 	prev_mouse_pos = mouse_position
 
 
