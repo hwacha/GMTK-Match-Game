@@ -68,6 +68,15 @@ func load_person_data(pd: PersonData):
 				jamb.transform.origin.y = offset.y - offset.y * 2 * i
 				jamb.z_index = 1
 				self.interjambs.add_child(jamb)
+	
+	if stats['right'][0] == 1:
+		$BoundaryLeft/Upper.disabled = false
+	if stats['right'][1] == 1:
+		$BoundaryLeft/Lower.disabled = false
+	if stats['left'][0] == 1:
+		$BoundaryRight/Upper.disabled = false
+	if stats['left'][1] == 1:
+		$BoundaryRight/Lower.disabled = false
 
 	var icons = $Icons.get_children()
 	for i in range(0, len(icons)):
@@ -88,7 +97,6 @@ func _process(delta):
 	interjambs.rotation_degrees = wobble_degrees
 	face.rotation_degrees = wobble_degrees
 	base.rotation_degrees = wobble_degrees
-	$Stats.rotation_degrees = wobble_degrees
 	$Icons.rotation_degrees = wobble_degrees
 	$LabelContainer.rotation_degrees = wobble_degrees
 
@@ -134,7 +142,6 @@ func set_invisible():
 
 
 func start_wobble():
-
 	wobble = true
 	wobble_degrees = 0
 	wobble_right = false
@@ -142,7 +149,6 @@ func start_wobble():
 	
 	
 func stop_wobble():
-
 	wobble = false
 	wobble_degrees = 0
 	wobble_right = false
