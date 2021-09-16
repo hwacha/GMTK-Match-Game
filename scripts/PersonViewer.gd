@@ -41,6 +41,3 @@ func load_person_data(pd: PersonData):
 		icon.set_icon(pd.icon_ids[i])
 		icon.set_color(pd.like_mask[i])
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

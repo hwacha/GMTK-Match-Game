@@ -20,4 +20,3 @@ func complete_pair(_selected, _target, _direction):
 	selected = _selected
 	target = _target
 	direction = _direction
-	

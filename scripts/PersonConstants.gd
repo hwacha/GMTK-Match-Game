@@ -520,7 +520,7 @@ const faces = ['00002',
  '08262'
 ]
 
-# These are some bios i found here: https://inspirationfeed.com/humble-quotes/
+# These are some bios I found here: https://inspirationfeed.com/humble-quotes/
 # They're kind of all over the place but should be a good placeholder for now.
 const bios = [
 	"A lie is just a great story ruined by truth.",

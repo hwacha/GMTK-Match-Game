@@ -1,18 +1,14 @@
 extends Node2D
 
-
 const start = Vector2(0, 0)
 
 const row_offset_x = 5
 const row_offset_y = 90
-
 const col_offset_x = 95
 const col_offset_y = 15
 
-
 const cards_per_row = 2
 const max_cards = 6
-
 const duration = 5
 
 var progress = 100

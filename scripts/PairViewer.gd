@@ -8,7 +8,6 @@ func _ready():
 	pass # Replace with function body.
 
 const similarity_start = Vector2(-48*2.5 + 2, 21)
-
 const difference_start1 = Vector2(-48*2.5 + 2, 73)
 const difference_start2 =  difference_start1 + Vector2(48 * 3, 0)
 const icon_offset = 35
@@ -81,9 +80,3 @@ func load_pair_data(pd1: PersonData, pd2: PersonData):
 		compatibility_text = 'AMAZING'
 	
 	$CompatibilityValue.text = compatibility_text
-		
-		
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

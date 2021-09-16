@@ -100,6 +100,3 @@ func new_sprite_texture():
 
 func new_name():
 	return name_array[rng.randi_range(0, len(name_array) - 1)]
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

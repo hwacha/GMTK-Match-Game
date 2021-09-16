@@ -1,6 +1,5 @@
 extends Node2D
 
-
 export var max_z = 0
 const _Card = preload("res://prefabs/Card.tscn")
 const Card = preload("res://scripts/Card.gd")
@@ -21,7 +20,6 @@ onready var person_factory = get_node('PersonFactory')
 
 var rng = RandomNumberGenerator.new()
 
-var reservoir_cards = []
 var prev_mouse_pos = null
 
 # Called when the node enters the scene tree for the first time.
@@ -38,7 +36,6 @@ func _ready():
 		card.z_index = 2 * n
 		# have to load the card into the scene before updating it's values
 		# kinda weird! feel like there should be a better way to do this
-		# will investigate at a later date.
 		add_child(card)
 
 		var pd = person_factory.new_person_data()
@@ -89,13 +86,11 @@ func update_view_card(card):
 		_pair_view.load_pair_data(selected_card.person_data, target_card.person_data)
 		_card_view.visible = false
 		_pair_view.visible = true
-	
 	#  single card hover/selected
 	elif card and card.pair_state in [Card.PairState.UNPAIRED, Card.PairState.RESERVOIR]:
 		_card_view.load_person_data(card.person_data)
 		_card_view.visible = true
 		_pair_view.visible = false
-	
 	# pair hover/selected
 	elif card and card.pair_state == Card.PairState.CONTAINER:
 		_pair_view.load_pair_data(card.target.person_data, card.selected.person_data)
@@ -137,7 +132,7 @@ func _process(delta):
 	if Input.is_action_just_released('mouse_left'):
 		if target_card != null:
 			pair_selected_with_target()
-		elif in_pairzone and selected_card.pair_state == Card.PairState.CONTAINER:
+		elif in_pairzone and selected_card and selected_card.pair_state == Card.PairState.CONTAINER:
 			submit_pair()
 		set_selected_card(null)
 		update_view_card(null)
@@ -146,9 +141,8 @@ func _process(delta):
 		if view_card and view_card.pair_state == Card.PairState.CONTAINER:
 			unpair_selected()
 
-	# note, because of this: right now, it's possible we could somehow click before we have something as our selected card
-	# plausible but I think it's fine for now
-	# TODO: remove the frame of lag
+	# note: we're relying on a physics proccess, which means it could get a
+	# frame out of sync. seems responsive enough for now.
 	if not selected_card: #and mouse_position != prev_mouse_pos:
 		update_view_card(pull_for_view_card())
 	else:
@@ -169,11 +163,14 @@ func update_target(new_target,  direction):
 func pair_selected_with_target():
 	assert(selected_card.pair_state == Card.PairState.UNPAIRED)
 	assert(target_card.pair_state == Card.PairState.UNPAIRED)
-
+	
+	# when we remove the target card, we trigger a exit event
+	# unsetting our target and direction. this is cursed so we're
+	# stashing the current object references before we mess with them
 	var curr_target = target_card
 	var curr_direction = target_direction
 	var curr_selected = selected_card
-	print('pairing %s with target %s from direction %s' % [curr_selected.person_data.first_name, curr_target.person_data.first_name, curr_direction])
+
 	curr_selected.pair_state = Card.PairState.PAIRED
 	curr_target.pair_state = Card.PairState.PAIRED
 	var pair_container = _PairContainer.instance()
@@ -181,10 +178,7 @@ func pair_selected_with_target():
 	pair_container.z_index = max_z
 	self.add_child(pair_container) 
 	pair_container.position = Vector2((curr_target.position.x + curr_selected.position.x)/2, curr_target.position.y).floor()
-	
-	# this stuff is absolutely fucked. when we remove the target card,
-	# we trigger a exit event, unsetting our target and direction
-	
+
 	curr_target.z_index = 0
 	curr_selected.z_index = 0
 	self.remove_child(curr_target)
@@ -228,8 +222,6 @@ func unpair_selected():
 	pair_container.queue_free()
 	set_selected_card(null)
 	update_view_card(null)
-	
-
 
 func submit_pair():
 	var pair_container = selected_card
@@ -258,13 +250,11 @@ func _card_exited(exited, exiting):
 		new_target = exiting
 	else:
 		new_target = exited
-	
+
 	if new_target == target_card:
-		#print('target released: %s', target_card.person_data.first_name)
 		update_target(null, null)
 	
 func _card_entered(entered, entering):
-	#print('cards %s, %s' % [entered, entering])
 	assert(entering != entered)
 	if not selected_card in [entered, entering]:
 		return
@@ -276,13 +266,11 @@ func _card_entered(entered, entering):
 	else:
 		new_target = entered
 		direction = 'left'
-		
-	print('potential target: %s from %s' % [new_target.person_data.first_name, direction])
+
 	if selected_card.can_pair(new_target, direction):
 		update_target(new_target, direction)
-		print('new target: %s', target_card.person_data.first_name)
 	else:
-		print('pair failed!')
+		pass
 
 func _on_PairZone_area_entered(area):
 	in_pairzone = true

@@ -100,16 +100,6 @@ func _process(delta):
 	$Icons.rotation_degrees = wobble_degrees
 	$LabelContainer.rotation_degrees = wobble_degrees
 
-
-func is_colliding(point):
-	var rect = get_node('Full').get_shape()
-	if not (rect is RectangleShape2D):
-		return false
-	if (point.x <= position.x + rect.extents.x) and (point.x >= position.x - rect.extents.x):
-		if (point.y <= position.y + rect.extents.y) and (point.y >= position.y - rect.extents.y):
-			return true
-	return false
-
 func _on_Card_area_entered(area):
 	pass
 	
@@ -119,8 +109,6 @@ func _on_Card_area_exited(area):
 func set_color(color):
 	get_node('Base').modulate = color
 	get_node('Interjambs').modulate = color
-
-
 
 func can_pair(target, our_dir):
 	if pair_state != PairState.UNPAIRED or target.pair_state != PairState.UNPAIRED:
@@ -139,21 +127,17 @@ func set_invisible():
 		child.visible = false
 	get_node('Stats').visible = true
 
-
-
 func start_wobble():
 	wobble = true
 	wobble_degrees = 0
 	wobble_right = false
 	target = 10
-	
-	
+
 func stop_wobble():
 	wobble = false
 	wobble_degrees = 0
 	wobble_right = false
 	target = 10
-
 
 func _on_Boundary_area_entered(area):
 	var card = area.get_parent()
@@ -165,4 +149,3 @@ func _on_Boundary_area_exited(area):
 	var card = area.get_parent()
 	if card != self and card.get_script() == self.script:
 		emit_signal('card_exited', self, card)
-	
