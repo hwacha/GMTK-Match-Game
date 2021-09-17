@@ -14,13 +14,13 @@ scale = Vector2( 3, 3 )
 texture = ExtResource( 3 )
 
 [node name="Bio" type="Label" parent="."]
-margin_left = -88.8957
-margin_top = 43.0835
-margin_right = 84.1043
-margin_bottom = 91.0835
+margin_left = -89.0
+margin_top = 34.7867
+margin_right = 89.0
+margin_bottom = 95.7867
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "I love wearing contacts ya feel? It makes me feel like i'm not blind"
+text = "I love wearing contacts ya feel? It makes me feel like i'm not blind. That's GOOD ACUALLY"
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -28,12 +28,12 @@ __meta__ = {
 
 [node name="NameAge" type="Label" parent="."]
 margin_left = -88.7011
-margin_top = -9.27809
 margin_right = 38.2989
-margin_bottom = 45.7219
+margin_bottom = 40.0
 custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Leighton, 34"
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }

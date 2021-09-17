@@ -1,9 +1,8 @@
 [gd_resource type="DynamicFont" load_steps=2 format=2]
 
-[sub_resource type="DynamicFontData" id=1]
-font_path = "res://Mukta-Regular.ttf"
+[ext_resource path="res://Stacked pixel.ttf" type="DynamicFontData" id=1]
 
 [resource]
-size = 24
+size = 32
 use_mipmaps = true
-font_data = SubResource( 1 )
+font_data = ExtResource( 1 )

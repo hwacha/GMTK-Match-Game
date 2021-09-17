@@ -22,11 +22,13 @@ texture = ExtResource( 3 )
 [node name="NameAge1" type="Label" parent="."]
 margin_left = -136.0
 margin_top = -58.0
-margin_right = 64.0
-margin_bottom = -3.0
+margin_right = 145.0
+margin_bottom = -16.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Leighton, 34"
+text = "Leighton
+"
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -34,19 +36,20 @@ __meta__ = {
 [node name="NameAge2" type="Label" parent="."]
 margin_left = 4.0
 margin_top = -58.0
-margin_right = 170.0
-margin_bottom = -3.0
+margin_right = 145.0
+margin_bottom = -16.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Leighton, 34"
+text = "Leighton"
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Similarities" type="Label" parent="."]
-margin_left = -134.878
+margin_left = -138.0
 margin_top = -14.0
-margin_right = 135.0
+margin_right = 131.878
 margin_bottom = 0.000404358
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -70,7 +73,6 @@ __meta__ = {
 }
 
 [node name="None1" type="Label" parent="."]
-visible = false
 margin_left = -135.82
 margin_top = 14.0
 margin_right = 135.0
@@ -84,7 +86,6 @@ __meta__ = {
 }
 
 [node name="None2" type="Label" parent="."]
-visible = false
 margin_left = -135.82
 margin_top = 68.0
 margin_right = 135.0

@@ -13,11 +13,11 @@ enum PairState {RESERVOIR, UNPAIRED, PAIRED, CONTAINER}
 const offsets = {
 	'left': {
 		'neu' : Vector2(40, 26),
-		'pos' : Vector2(47, 26)
+		'pos' : Vector2(46, 26)
 	},
 	'right': {
 		'neu' : Vector2(-40, 26),
-		'pos' : Vector2(-47, 26)
+		'pos' : Vector2(-46, 26)
 	},
 }
 const rotations = {

@@ -29,8 +29,10 @@ func load_pair_data(pd1: PersonData, pd2: PersonData):
 
 	$Sprite1.texture = pd1.face_id
 	$Sprite2.texture = pd2.face_id
-	$NameAge1.text = "%s, %s" % [pd1.first_name, pd1.age]
-	$NameAge2.text = "%s, %s" % [pd2.first_name, pd2.age]
+	$NameAge1.text = pd1.first_name
+	$NameAge2.text = pd2.first_name
+#	$NameAge1.text = "%s, %s" % [pd1.first_name, pd1.age]
+#	$NameAge2.text = "%s, %s" % [pd2.first_name, pd2.age]
 	
 	var similarity_count = 0
 	var difference_count = 0
