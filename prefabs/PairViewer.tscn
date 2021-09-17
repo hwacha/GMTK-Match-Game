@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/PairViewer.gd" type="Script" id=1]
-[ext_resource path="res://mukta24.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/fonts/mukta24.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/pixel_faces/00067.png" type="Texture" id=3]
-[ext_resource path="res://mukta48.tres" type="DynamicFont" id=4]
-[ext_resource path="res://mukta16.tres" type="DynamicFont" id=5]
+[ext_resource path="res://assets/fonts/mukta48.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/fonts/mukta16.tres" type="DynamicFont" id=5]
 
 [node name="PairViewer" type="Node2D"]
 script = ExtResource( 1 )

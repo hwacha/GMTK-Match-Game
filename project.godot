@@ -28,7 +28,6 @@ _global_script_class_icons={
 
 config/name="gmtk_match_game"
 run/main_scene="res://prefabs/Field.tscn"
-config/icon="res://icon.png"
 
 [importer_defaults]
 

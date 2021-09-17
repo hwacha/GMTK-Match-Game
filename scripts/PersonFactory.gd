@@ -3,10 +3,11 @@ extends Node2D
 const PersonData = preload("res://scripts/PersonData.gd")
 const PersonConstants = preload("res://scripts/PersonConstants.gd")
 
-var sprite_array = []
+var male_sprite_array = []
+var female_sprite_array = []
 
-const name_array = PersonConstants.names
-
+const male_name_array = PersonConstants.male_names
+const female_name_array =  PersonConstants.female_names
 
 #var past_names = []
 #var current_names = []
@@ -21,9 +22,13 @@ var rng = RandomNumberGenerator.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	for face_id in PersonConstants.faces:
-		var path = "res://assets/pixel_faces/%s.png" % face_id
-		sprite_array.append(load(path))
+	for face_id in range(1, PersonConstants.num_male_faces + 1):
+		var path = "res://assets/faces_v2/men/man%s.png" % face_id
+		male_sprite_array.append(load(path))
+	
+	for face_id in range(1, PersonConstants.num_female_faces + 1):
+		var path = "res://assets/faces_v2/women/woman%s.png" % face_id
+		female_sprite_array.append(load(path))
 
 	rng.randomize()
 	
@@ -76,11 +81,19 @@ func new_person_data():
 			like_mask[i] = 0
 		else:
 			like_mask[i] = 1
+	var gender = 'male' if rng.randi_range(0, 1) == 0 else 'female'
+	var face_id = null
+	var first_name = null
+	match gender:
+		'male':
+			face_id = male_sprite_array[rng.randi_range(0, len(male_sprite_array) - 1)]
+			first_name = male_name_array[rng.randi_range(0, len(male_name_array) - 1)]
+		'female':
+			face_id = female_sprite_array[rng.randi_range(0, len(female_sprite_array) - 1)]
+			first_name = female_name_array[rng.randi_range(0, len(female_name_array) - 1)]
 	
-	var face_id = sprite_array[rng.randi_range(0, len(sprite_array) - 1)]
-	var first_name = name_array[rng.randi_range(0, len(name_array) - 1)]
 	var bio = PersonConstants.bios[rng.randi_range(0, len(PersonConstants.bios) - 1)]
-	var gender = 'male'
+
 	var age = rng.randi_range(21, 44)
 	var rate = 0.5 + rng.randf_range(0, 1)
 
@@ -96,8 +109,8 @@ func new_person_data():
 		rate
 	)
 
-func new_sprite_texture():
-	return sprite_array[rng.randi_range(0, len(sprite_array) - 1)]
+#func new_sprite_texture():
+#	return sprite_array[rng.randi_range(0, len(sprite_array) - 1)]
 
-func new_name():
-	return name_array[rng.randi_range(0, len(name_array) - 1)]
+#func new_name():
+#	return name_array[rng.randi_range(0, len(name_array) - 1)]

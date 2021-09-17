@@ -244,7 +244,6 @@ func submit_pair():
 	
 
 ## Handle Signals
-
 func _card_exited(exited, exiting):
 	assert(exited != exiting)
 	if  not (selected_card in [exited, exiting]):

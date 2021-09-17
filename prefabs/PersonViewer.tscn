@@ -2,8 +2,8 @@
 
 [ext_resource path="res://scripts/PersonViewer.gd" type="Script" id=1]
 [ext_resource path="res://assets/pixel_faces/00067.png" type="Texture" id=3]
-[ext_resource path="res://mukta32.tres" type="DynamicFont" id=4]
-[ext_resource path="res://mukta16.tres" type="DynamicFont" id=5]
+[ext_resource path="res://assets/fonts/mukta32.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/fonts/mukta16.tres" type="DynamicFont" id=5]
 
 [node name="PersonViewer" type="Node2D"]
 script = ExtResource( 1 )
