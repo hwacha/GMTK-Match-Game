@@ -190,7 +190,7 @@ func pair_selected_with_target():
 	pair_container.add_child(curr_target)
 	pair_container.add_child(curr_selected)
 	
-	var side_offset = Vector2(94 / 2, 0)
+	var side_offset = Vector2(108 / 2, 0)
 	
 	if curr_direction == 'right':
 		selected_card.position = side_offset
