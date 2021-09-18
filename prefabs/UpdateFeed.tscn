@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://prefabs/UpdateCard.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/UpdateFeed.gd" type="Script" id=2]
+[ext_resource path="res://scroll_bar_theme.tres" type="Theme" id=3]
+
+[node name="UpdateFeed" type="ScrollContainer"]
+margin_right = 288.0
+margin_bottom = 550.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 3 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UpdateContainer" type="VBoxContainer" parent="."]
+margin_right = 288.0
+margin_bottom = 550.0
+rect_min_size = Vector2( 288, 550 )
+
+[node name="UpdateCard" parent="UpdateContainer" instance=ExtResource( 1 )]

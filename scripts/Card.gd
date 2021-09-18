@@ -36,7 +36,7 @@ var stats = {
 
 var person_data: PersonData = null
 var pair_state = PairState.UNPAIRED
-var global_rate = 2.0
+var global_rate = 1.0
 
 onready var interjambs = get_node("Interjambs")
 onready var textlabel = get_node("LabelContainer/Label")
@@ -104,11 +104,11 @@ func _process(delta):
 	$Icons.rotation_degrees = wobble_degrees
 	$LabelContainer.rotation_degrees = wobble_degrees
 	
-	
-	person_data.happiness = person_data.happiness -  delta * global_rate * person_data.rate
-	$ProgressBar.value = person_data.happiness
-	if person_data.happiness <= 0:
-		emit_signal("person_card_quit", self)
+	if person_data:
+		person_data.happiness = person_data.happiness -  delta * global_rate * person_data.rate
+		$ProgressBar.value = person_data.happiness
+		if person_data.happiness <= 0:
+			emit_signal("person_card_quit", self)
 	
 	
 	

@@ -1,0 +1,141 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/fonts/mukta16.tres" type="DynamicFont" id=1]
+[ext_resource path="res://assets/faces_v2/women/woman32.png" type="Texture" id=2]
+[ext_resource path="res://assets/fonts/mukta32.tres" type="DynamicFont" id=3]
+[ext_resource path="res://scripts/UpdateCard.gd" type="Script" id=4]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0.713726, 0.145098, 1 )
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=2]
+anti_aliasing = false
+
+[node name="UpdateCard" type="Control"]
+margin_right = 288.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 288, 128 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Container" type="Node2D" parent="."]
+
+[node name="Person1" type="Sprite" parent="Container"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Person1Happiness" type="ProgressBar" parent="Container"]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 192.0
+margin_bottom = 80.0
+rect_rotation = -90.0
+rect_scale = Vector2( 0.5, 0.5 )
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
+value = 50.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Person2" type="Sprite" parent="Container"]
+position = Vector2( 0, 64 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Person2Happiness" type="ProgressBar" parent="Container"]
+margin_left = 64.0
+margin_top = 128.0
+margin_right = 192.0
+margin_bottom = 144.0
+rect_rotation = -90.0
+rect_scale = Vector2( 0.5, 0.5 )
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
+value = 50.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Names" type="Label" parent="Container"]
+margin_left = 78.0
+margin_top = 2.0
+margin_right = 287.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 209, 26 )
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "EMILY + ALEX"
+clip_text = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Update" type="Label" parent="Container"]
+margin_left = 78.0
+margin_top = 36.0
+margin_right = 287.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 209, 50 )
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Status" type="Label" parent="Container"]
+margin_left = 74.0
+margin_top = 110.0
+margin_right = 214.0
+margin_bottom = 123.0
+rect_min_size = Vector2( 100, 13 )
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "STATUS: IMPROVING"
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus" type="Label" parent="Container"]
+margin_left = 240.0
+margin_top = 110.0
+margin_right = 280.0
+margin_bottom = 123.0
+rect_min_size = Vector2( 40, 13 )
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "+1000"
+align = 2
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="Container"]
+show_behind_parent = true
+margin_right = 288.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 215, 128 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

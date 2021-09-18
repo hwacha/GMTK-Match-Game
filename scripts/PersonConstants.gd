@@ -407,8 +407,8 @@ const female_names = ["Emily",
 "Ellie",
 "Jasmin"]
 
-const num_male_faces = 264
-const num_female_faces = 425
+const num_male_faces = 20
+const num_female_faces = 19
 
 # These are some bios I found here: https://inspirationfeed.com/humble-quotes/
 # They're kind of all over the place but should be a good placeholder for now.

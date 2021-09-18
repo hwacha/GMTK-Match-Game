@@ -28,7 +28,7 @@ var graveyard = []
 func _ready():
 	rng.randomize()
 	
-	var num_cards = 20
+	var num_cards = 10
 	for n in range(num_cards):
 		add_card_to_field()
 
@@ -161,7 +161,7 @@ func update_target(new_target,  direction):
 		target_card.set_color(Color(1, 1, 1, 1))
 	target_card = new_target
 	if target_card:
-		target_card.set_color(Color(0.8, 0.2, 0, 1))
+		target_card.set_color(Color(float(239) / 255, float(236) / 255, float(207) / 255, 1))
 
 
 func pair_selected_with_target():
@@ -238,7 +238,10 @@ func submit_pair():
 	var pd2 = pair_container.target.person_data
 	var compatibility = PersonData.score_compatibility(pd1, pd2)
 	
-	score +=  10 * (compatibility + 4) * (compatibility + 4)
+	var score_delta = 10 * (compatibility + 4) * (compatibility + 4)
+	$UpdateFeed.add_couple(pd1, pd2, score_delta)
+	score +=  score_delta
+
 	$Score.text = str(score) 
 	pair_container.queue_free()
 	
@@ -299,3 +302,6 @@ func _person_card_quit(card):
 func process_death(pd):
 	score -= 100
 	$Score.text = str(score)
+	
+func _on_couple_breakup(pd1, pd2):
+	pass

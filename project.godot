@@ -18,16 +18,26 @@ _global_script_classes=[ {
 "class": "PersonData",
 "language": "GDScript",
 "path": "res://scripts/PersonData.gd"
+}, {
+"base": "Reference",
+"class": "UpdateData",
+"language": "GDScript",
+"path": "res://scripts/UpdateData.gd"
 } ]
 _global_script_class_icons={
 "PersonConstants": "",
-"PersonData": ""
+"PersonData": "",
+"UpdateData": ""
 }
 
 [application]
 
-config/name="gmtk_match_game"
+config/name="matchmaker3000"
 run/main_scene="res://prefabs/Field.tscn"
+
+[display]
+
+window/size/width=1400
 
 [importer_defaults]
 
