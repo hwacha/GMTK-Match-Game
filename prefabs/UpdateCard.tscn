@@ -81,13 +81,12 @@ __meta__ = {
 
 [node name="Update" type="Label" parent="Container"]
 margin_left = 78.0
-margin_top = 36.0
+margin_top = 29.0
 margin_right = 287.0
-margin_bottom = 49.0
-rect_min_size = Vector2( 209, 50 )
+margin_bottom = 107.0
+rect_min_size = Vector2( 209, 78 )
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 valign = 1
 autowrap = true
 clip_text = true
