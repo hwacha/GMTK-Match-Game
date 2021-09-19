@@ -29,6 +29,7 @@ var graveyard = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_sound.get_node("BackgroundMusic").play()
 	rng.randomize()
 	var num_cards = 4
 	for n in range(num_cards):
