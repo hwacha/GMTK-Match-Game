@@ -23,11 +23,11 @@ var rng = RandomNumberGenerator.new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for face_id in range(1, PersonConstants.num_male_faces + 1):
-		var path = "res://assets/faces_v3/men/%s.png" % face_id
+		var path = "res://assets/faces_v4/men/%s.png" % face_id
 		male_sprite_array.append(load(path))
 	
 	for face_id in range(1, PersonConstants.num_female_faces + 1):
-		var path = "res://assets/faces_v3/women/%s.png" % face_id
+		var path = "res://assets/faces_v4/women/%s.png" % face_id
 		female_sprite_array.append(load(path))
 
 	rng.randomize()

@@ -407,8 +407,8 @@ const female_names = ["Emily",
 "Ellie",
 "Jasmin"]
 
-const num_male_faces = 20
-const num_female_faces = 19
+const num_male_faces = 40
+const num_female_faces = 40
 
 const icon_map = ["oranges",
 	"corn",
