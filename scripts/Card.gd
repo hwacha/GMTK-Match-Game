@@ -36,7 +36,7 @@ var stats = {
 
 var person_data: PersonData = null
 var pair_state = PairState.UNPAIRED
-var global_rate = 1.0
+var global_rate = 12.0
 
 onready var interjambs = get_node("Interjambs")
 onready var textlabel = get_node("LabelContainer/Label")

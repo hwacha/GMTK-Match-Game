@@ -36,3 +36,4 @@ func _on_card_fadeout_complete(card):
 		print('in branch')
 		get_parent().post_breakup(card.pd1, card.pd2)
 	update_container.remove_child(card)
+	card.queue_free()

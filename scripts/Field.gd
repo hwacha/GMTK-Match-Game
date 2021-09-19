@@ -5,14 +5,14 @@ const _Card = preload("res://prefabs/Card.tscn")
 const Card = preload("res://scripts/Card.gd")
 const _PairContainer = preload("res://prefabs/PairContainer.tscn")
 const PairContainer = preload("res://scripts/PairContainer.gd")
-
+const EndMenu = preload("res://prefabs/EndMenu.tscn")
 var selected_card = null
 var view_card = null
 var target_card = null
 var target_direction = null
 
 var in_pairzone = false
-var score = 0
+var score = 5
 var lives = 10
 
 onready var _card_view = get_node("PersonViewer")
@@ -28,7 +28,6 @@ var graveyard = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	rng.randomize()
-	$StarContainer.update_stars(4)
 	var num_cards = 4
 	for n in range(num_cards):
 		add_card_to_field()
@@ -117,9 +116,8 @@ func update_view_card(card):
 		_pair_view.visible = false
 
 func _process(delta):
-	$StarContainer.update_stars(lives)
-	if Input.is_action_just_pressed("ui_up"):
-		get_tree().change_scene("res://prefabs/Field.tscn")
+	#if Input.is_action_just_pressed("ui_up"):
+	#	get_tree().change_scene("res://prefabs/Field.tscn")
 	
 	var mouse_position = get_viewport().get_mouse_position()
 	
@@ -303,6 +301,8 @@ func update_score(value):
 func process_death(pd):
 	lives = lives - 1
 	$StarContainer.update_stars(lives)
+	if lives <= 0:
+		end_game()
 	
 func post_breakup(pd1, pd2):
 	for pd in [pd1, pd2]:
@@ -317,3 +317,12 @@ func post_breakup(pd1, pd2):
 		var x = rng.randi_range(288 + 100, 764 - 100)
 		var y = rng.randi_range(200, 300)
 		card.set_position(Vector2(x, y))
+
+func end_game():
+	
+	var score_singleton = get_tree().get_root().get_node('ScoreSingleton')
+	score_singleton.score = score
+	get_tree().change_scene("res://prefabs/EndMenu.tscn")
+	queue_free()
+	
+	
