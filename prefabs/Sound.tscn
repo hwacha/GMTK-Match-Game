@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/sounds/Fruit collect 1.wav" type="AudioStream" id=1]
 [ext_resource path="res://assets/sounds/Select 1.wav" type="AudioStream" id=2]
@@ -7,8 +7,13 @@
 [ext_resource path="res://assets/sounds/Big Egg collect 1.wav" type="AudioStream" id=5]
 [ext_resource path="res://assets/sounds/Boss hit 1.wav" type="AudioStream" id=6]
 [ext_resource path="res://assets/sounds/Hit damage 1.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/sounds/matchmaker3000_background_music.wav" type="AudioStream" id=8]
 
 [node name="Sound" type="Node2D"]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+volume_db = -12.117
 
 [node name="BoopHighF" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
