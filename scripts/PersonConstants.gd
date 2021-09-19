@@ -451,7 +451,7 @@ const icon_map = ["oranges",
 # They're kind of all over the place but should be a good placeholder for now.
 const bios = [
 	"A lie is just a great story ruined by truth.",
-	"Actually, I’m not funny, I’m having a mental disorder",
+	"Actually, I’m not funny, I’m having a mental breakdown.",
 	"Chaos, panic & disorder – my work here is done.",
 	"Did my opinion offend you? You should hear the ones I don’t say out loud.",
 	"Don’t worry if plan A fails; there are twenty-five other letters in the alphabet.",
@@ -476,7 +476,6 @@ const bios = [
 	"Recommended by 4 out of 5 people that recommend things.",
 	"Recovering ice cream addict",
 	"Sassy, classy with a touch of badassy",
-	"Some people are alive only because it’s illegal to kill them.",
 	"The last thing I want to do is hurt you. But it’s still on the list.",
 	"The older I get, the more everyone can kiss my ass.",
 	"The only reason I am fat is because a tiny body couldn’t store all this personality.",
@@ -487,5 +486,4 @@ const bios = [
 	"Where the hell am I, and how did I get here?",
 	"Why don’t some couples go to the gym? Because some relationships don’t work out.",
 	"Words cannot express my passion and love for Fridays",
-	"You do realize makeup isn’t going to fix your stupidity?"
 ]

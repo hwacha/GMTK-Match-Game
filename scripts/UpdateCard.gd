@@ -16,7 +16,7 @@ var field = null
 
 const global_rate = -1
 const update_step = 5
-const fade_out_duration = 5
+const fade_out_duration = 10
 const max_name_length = 12
 
 var time_since_update = 0
@@ -107,8 +107,12 @@ func _process(delta):
 			emit_signal('card_update_ready', self, update)
 	
 	if fading_out:
-		time_since_update += delta 
-		if time_since_update >= fade_out_duration:
+		time_since_fadeout_start += delta 
+		var fade_ratio = time_since_fadeout_start / fade_out_duration
+		var new_color = 1 - fade_ratio * fade_ratio
+		modulate = Color(new_color, new_color, new_color)
+
+		if time_since_fadeout_start >= fade_out_duration:
 			fading_out = false
 			print('faded out complete')
 			emit_signal('card_fadeout_complete', self)

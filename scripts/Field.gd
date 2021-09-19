@@ -28,7 +28,7 @@ var graveyard = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	rng.randomize()
-	
+	$StarContainer.update_stars(4)
 	var num_cards = 4
 	for n in range(num_cards):
 		add_card_to_field()
@@ -117,6 +117,7 @@ func update_view_card(card):
 		_pair_view.visible = false
 
 func _process(delta):
+	$StarContainer.update_stars(lives)
 	if Input.is_action_just_pressed("ui_up"):
 		get_tree().change_scene("res://prefabs/Field.tscn")
 	
@@ -300,8 +301,8 @@ func update_score(value):
 	$Score.text = str(score)
 
 func process_death(pd):
-	score -= 100
-	$Score.text = str(score)
+	lives = lives - 1
+	$StarContainer.update_stars(lives)
 	
 func post_breakup(pd1, pd2):
 	for pd in [pd1, pd2]:
