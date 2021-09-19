@@ -586,7 +586,7 @@ const activity_templates = {
 	],
 	Activities.SOCIAL: [
 		[
-			"%s and %s went to %s for %s",
+			"%s and %s went to %s for %s.",
 			[
 				"a party",
 				"a birthday party",

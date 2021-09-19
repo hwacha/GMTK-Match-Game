@@ -12,7 +12,7 @@ var target_card = null
 var target_direction = null
 
 var in_pairzone = false
-var score = 5
+var score = 0
 var lives = 10
 
 onready var _card_view = get_node("PersonViewer")

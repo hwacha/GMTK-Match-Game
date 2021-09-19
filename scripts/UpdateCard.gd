@@ -15,7 +15,7 @@ var update_factory = null
 var field = null
 
 const global_rate = -1
-const update_step = 5
+const update_step = 1
 const fade_out_duration = 10
 const max_name_length = 12
 

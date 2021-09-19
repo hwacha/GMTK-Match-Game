@@ -43,6 +43,8 @@ ScoreSingleton="*res://prefabs/ScoreSingleton.tscn"
 
 window/size/width=1152
 window/size/height=738
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
 
 [importer_defaults]
 

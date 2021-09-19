@@ -98,12 +98,12 @@ __meta__ = {
 [node name="Status" type="Label" parent="Container"]
 margin_left = 74.0
 margin_top = 110.0
-margin_right = 214.0
+margin_right = 194.0
 margin_bottom = 123.0
-rect_min_size = Vector2( 100, 13 )
+rect_min_size = Vector2( 150, 13 )
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "STATUS: IMPROVING"
+text = "STATUS: cohabitating"
 valign = 1
 autowrap = true
 clip_text = true

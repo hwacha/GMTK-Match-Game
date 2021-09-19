@@ -9,7 +9,7 @@ const col_offset_y = 3
 
 const cards_per_row = 5
 const max_cards = 10
-const duration = 5
+const duration = 8
 
 var progress = 100
 var waiting_for_card = false
