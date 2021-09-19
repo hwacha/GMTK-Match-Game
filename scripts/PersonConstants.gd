@@ -452,7 +452,7 @@ const icon_map = ["oranges",
 const bios = [
 	"A lie is just a great story ruined by truth.",
 	"Actually, I’m not funny, I’m having a mental breakdown.",
-	"Chaos, panic & disorder – my work here is done.",
+	"Chaos, panic + disorder – my work here is done.",
 	"Did my opinion offend you? You should hear the ones I don’t say out loud.",
 	"Don’t worry if plan A fails; there are twenty-five other letters in the alphabet.",
 	"Eat right. Stay in shape. Die anyway.",

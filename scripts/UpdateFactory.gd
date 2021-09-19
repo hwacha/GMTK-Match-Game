@@ -15,11 +15,11 @@ func _ready():
 ## SIMULATION CODE
 enum Event {BAD, NEUTRAL, GOOD}
 
-const base_event_distribution = [0.2, 0.4, 0.4]
+const base_event_distribution = [0.2, 0.6, 0.2]
 # probability of update being BAD, NEUTRAL, GOOD
 const event_likelihoods = {
-	UpdateData.MATCHED: base_event_distribution,
-	UpdateData.TALKING: base_event_distribution,
+	UpdateData.MATCHED: [0.5, 0, 0.5],
+	UpdateData.TALKING: [0.5, 0, 0.5],
 	UpdateData.DATING_CASUAL: base_event_distribution,
 	UpdateData.DATING_OFFICIAL: base_event_distribution,
 	UpdateData.MOVED_IN_TOGETHER: base_event_distribution,
@@ -42,8 +42,8 @@ func get_outcome(distribution):
 # probably of breaking up given BAD or advancing given GOOD
 const base_transition_likelihood = [0.5, 0.5]
 const transition_likelihoods = {
-	UpdateData.MATCHED: base_transition_likelihood,
-	UpdateData.TALKING: base_transition_likelihood,
+	UpdateData.MATCHED: [1, 1],
+	UpdateData.TALKING: [1, 1],
 	UpdateData.DATING_CASUAL: base_transition_likelihood,
 	UpdateData.DATING_OFFICIAL: base_transition_likelihood,
 	UpdateData.MOVED_IN_TOGETHER: base_transition_likelihood,
@@ -195,7 +195,7 @@ const good_transition_text = {
 	],
 	UpdateData.MOVED_IN_TOGETHER: [
 		'%s proposed to %s. %s said yes!',
-		'%s asked %s to married them. %s said yes!'
+		'%s asked %s to marry them. %s said yes!'
 	],
 	UpdateData.ENGAGED: [
 		'%s and %s got married. %s delivered beautiful vows',
