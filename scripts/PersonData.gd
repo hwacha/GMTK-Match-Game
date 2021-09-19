@@ -37,7 +37,6 @@ func _init(
 	bio = _bio
 	rate = _rate
 
-
 static func score_compatibility(pd: PersonData, pd2: PersonData) -> int:
 	var score = 0
 	for i in range(0, len(pd.icon_ids)):
@@ -48,3 +47,39 @@ static func score_compatibility(pd: PersonData, pd2: PersonData) -> int:
 			else:
 				score -= 1
 	return score
+
+func get_common_icon(pd2):
+	var candidates = []
+	for i in range(0, len(icon_ids)):
+		var j = pd2.icon_ids.find(icon_ids[i])
+		if j != -1 and like_mask[i] == pd2.like_mask[j]:
+			candidates.append(icon_ids[i])
+	if len(candidates) == 0:
+		return -1
+	randomize()
+	candidates.shuffle()
+	return candidates[0]
+
+func get_opposite_icon(pd2):
+	var candidates = []
+	for i in range(0, len(icon_ids)):
+		var j = pd2.icon_ids.find(icon_ids[i])
+		if j != -1 and like_mask[i] != pd2.like_mask[j]:
+			candidates.append(icon_ids[i])
+	if len(candidates) == 0:
+		return -1
+	randomize()
+	candidates.shuffle()
+	return candidates[0]
+
+func get_no_overlap_icon(pd2):
+	var candidates = []
+	for i in range(0, len(icon_ids)):
+		if not icon_ids[i] in pd2.icon_ids:
+			candidates.append(icon_ids[i])
+	if len(candidates) == 0:
+		return -1
+	randomize()
+	candidates.shuffle()
+	return candidates[0]
+	

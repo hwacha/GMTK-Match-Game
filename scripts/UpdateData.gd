@@ -11,24 +11,64 @@ enum {
 	BROKEN_UP, 
 }
 
+const status_map = {
+	MATCHED: 'matched',
+	TALKING: 'talking',
+	DATING_CASUAL: 'dating',
+	DATING_OFFICIAL: 'commited',
+	MOVED_IN_TOGETHER: 'cohabitating',
+	ENGAGED: 'engaged',
+	MARRIED: 'married',
+	BROKEN_UP: 'broken up'
+}
+
+const value_map = {
+	MATCHED: 25,
+	TALKING: 50,
+	DATING_CASUAL: 100,
+	DATING_OFFICIAL: 250,
+	MOVED_IN_TOGETHER: 500,
+	ENGAGED: 1000,
+	MARRIED: 2500,
+}
+
+
+static func score_update(next_state, current_state, compatibility=0):
+	var multiplier = 0
+	
+	if compatibility <= -2:
+		multiplier = 0
+	elif compatibility == -1:
+		multiplier = 0.2
+	elif compatibility == 0:
+		multiplier = 1
+	elif compatibility == 1:
+		multiplier = 2
+	elif compatibility > 2:
+		multiplier = 4
+	
+	print(next_state, BROKEN_UP)
+	if next_state.status != BROKEN_UP:
+		return  value_map[next_state.status] * multiplier
+	else:
+		if current_state == null:
+			assert(false)
+			return 0
+		return -2 * value_map[current_state.status]
+
+
 var text = ""
-var status = ""
-var rlevel = 0
-var value = 0
-var rlevel_count = 0
+var status = 0
+var count = 0
 
 func _init(
 	_text,
 	_status,
-	_rlevel,
-	_value,
-	_rlevel_count=0
+	_count=0
 ):
 	text = _text
 	status = _status
-	rlevel = _rlevel
-	value = _value
-	rlevel_count = _rlevel_count
+	count = _count
 
 
 

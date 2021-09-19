@@ -410,6 +410,43 @@ const female_names = ["Emily",
 const num_male_faces = 20
 const num_female_faces = 19
 
+const icon_map = ["oranges",
+	"corn",
+	"vinyl",
+	"guitar",
+	"drums",
+	"sneakers",
+	"carrots",
+	"watches",
+	"television",
+	"candy",
+	"basketball",
+	"woodworking",
+	"home improvement",
+	"soup",
+	"wine",
+	"mushrooms",
+	"tea",
+	"coffee",
+	"breakfast",
+	"smoothies",
+	"soda",
+	"ice cream",
+	"broccoli",
+	"hot dogs",
+	"burgers",
+	"pizza",
+	"sandwiches",
+	"fries",
+	"beer",
+	"spicy food",
+	"croisants",
+	"turkey",
+	"fish",
+	"shrimp",
+	"garlic"
+]
+
 # These are some bios I found here: https://inspirationfeed.com/humble-quotes/
 # They're kind of all over the place but should be a good placeholder for now.
 const bios = [

@@ -69,9 +69,9 @@ func new_person_data():
 
 	var icon_ids = [0, 0, 0, 0]
 	for i in range(0, len(icon_ids)):
-		var cand = rng.randi_range(1, 41)
+		var cand = rng.randi_range(0, len(PersonConstants.icon_map))
 		while icon_ids.has(cand):
-			cand = rng.randi_range(1, 41)
+			cand = rng.randi_range(0, len(PersonConstants.icon_map))
 		icon_ids[i] = cand 
 	
 	var num_likes = rng.randi_range(0, 4)

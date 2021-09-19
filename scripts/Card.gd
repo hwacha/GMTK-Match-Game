@@ -111,7 +111,6 @@ func _process(delta):
 			emit_signal("person_card_quit", self)
 	
 	
-	
 func _on_Card_area_entered(area):
 	pass
 	
