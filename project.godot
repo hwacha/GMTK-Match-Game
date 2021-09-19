@@ -38,6 +38,7 @@ run/main_scene="res://prefabs/Menu.tscn"
 [autoload]
 
 ScoreSingleton="*res://prefabs/ScoreSingleton.tscn"
+Sound="*res://prefabs/Sound.tscn"
 
 [display]
 

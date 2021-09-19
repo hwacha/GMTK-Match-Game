@@ -14,6 +14,8 @@ const duration = 8
 var progress = 100
 var waiting_for_card = false
 
+onready var _sound = get_tree().get_root().get_node("Sound")
+
 func _ready():
 	pass
 
@@ -51,6 +53,7 @@ func _process(delta):
 	
 	if progress >= 100 and len($Cards.get_children()) <  max_cards:
 		get_parent().add_card_to_reservoir()
+		_sound.get_node("BoopBb").play()
 		if len($Cards.get_children()) <  max_cards:
 			progress = 0
 		else:

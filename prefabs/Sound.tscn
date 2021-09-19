@@ -1,0 +1,37 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/sounds/Fruit collect 1.wav" type="AudioStream" id=1]
+[ext_resource path="res://assets/sounds/Select 1.wav" type="AudioStream" id=2]
+[ext_resource path="res://assets/sounds/Confirm 1.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/sounds/Cancel 1.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/sounds/Big Egg collect 1.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sounds/Boss hit 1.wav" type="AudioStream" id=6]
+[ext_resource path="res://assets/sounds/Hit damage 1.wav" type="AudioStream" id=7]
+
+[node name="Sound" type="Node2D"]
+
+[node name="BoopHighF" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+
+[node name="BoopC" type="AudioStreamPlayer2D" parent="."]
+position = Vector2( 0, 1 )
+stream = ExtResource( 2 )
+
+[node name="BoopBb" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+pitch_scale = 0.66
+
+[node name="BoopLowF" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+
+[node name="SuccessCF" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 1 )
+
+[node name="Married" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="Breakup" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+
+[node name="Die" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )

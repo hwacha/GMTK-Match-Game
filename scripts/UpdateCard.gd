@@ -33,6 +33,8 @@ onready var status_text = $Container/Status
 onready var bonus_text = $Container/Bonus
 onready var update_text = $Container/Update
 
+onready var _sound = get_tree().get_root().get_node("Sound")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 
@@ -75,12 +77,17 @@ func apply_update(update: UpdateData):
 		bonus_text.text = "+%s" % str(value)
 	else:
 		bonus_text.text = "%s" % str(value)
-	
-	if update.status != UpdateData.BROKEN_UP and update.status != UpdateData.MARRIED: 
-		waiting_for_update = false
-	else:
+		
+	if update.status == UpdateData.BROKEN_UP:
+		_sound.get_node("Breakup").play()
 		time_since_fadeout_start = 0
 		fading_out = true
+	elif update.status == UpdateData.MARRIED:
+		_sound.get_node("Married").play()
+		time_since_fadeout_start = 0
+		fading_out = true
+	else:
+		waiting_for_update = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 

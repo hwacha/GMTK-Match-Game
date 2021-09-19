@@ -19,6 +19,8 @@ onready var _card_view = get_node("PersonViewer")
 onready var _pair_view = get_node("PairViewer")
 onready var person_factory = get_node('PersonFactory')
 
+onready var _sound = get_tree().get_root().get_node("Sound")
+
 var rng = RandomNumberGenerator.new()
 
 var prev_mouse_pos = null
@@ -72,6 +74,7 @@ func set_selected_card(card):
 	selected_card = card
 	
 	if card:
+		_sound.get_node("BoopC").play()
 		if card.pair_state == Card.PairState.RESERVOIR:
 			var old_position = card.global_position
 			$Reservoir.remove_card(card)
@@ -137,6 +140,7 @@ func _process(delta):
 		if target_card != null:
 			pair_selected_with_target()
 		elif in_pairzone and selected_card and selected_card.pair_state == Card.PairState.CONTAINER:
+			_sound.get_node("SuccessCF").play()
 			submit_pair()
 		set_selected_card(null)
 		update_view_card(null)
@@ -199,6 +203,7 @@ func pair_selected_with_target():
 		selected_card.position = -1 * side_offset
 		curr_target.position =  side_offset
 
+	_sound.get_node("BoopHighF").play()
 	pair_container.complete_pair(curr_target, curr_selected, curr_direction)
 	set_selected_card(null)
 	update_view_card(null)
@@ -222,6 +227,7 @@ func unpair(pair_container):
 		self.add_child(card)
 		card.z_index = max_z
 
+	_sound.get_node("BoopLowF").play()
 	self.remove_child(pair_container)
 	pair_container.queue_free()
 	if was_view:
@@ -301,6 +307,7 @@ func update_score(value):
 func process_death(pd):
 	lives = lives - 1
 	$StarContainer.update_stars(lives)
+	_sound.get_node("Die").play()
 	if lives <= 0:
 		end_game()
 	

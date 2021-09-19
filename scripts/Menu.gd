@@ -5,6 +5,8 @@ extends Node2D
 # var a = 2
 # var b = "text"
 
+onready var confirm = get_tree().get_root().get_node("Sound").get_node("BoopHighF");
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -17,4 +19,5 @@ func _ready():
 
 
 func _on_Button_pressed():
+	confirm.play();
 	get_tree().change_scene("res://prefabs/Field.tscn")
