@@ -55,7 +55,7 @@ func add_card_to_field():
 	_finish_add_card(card)
 
 	var x = rng.randi_range(288 + 100, 764 - 100)
-	var y = rng.randi_range(100, 300)
+	var y = rng.randi_range(200, 300)
 	card.set_position(Vector2(x, y))
 
 func add_card_to_reservoir():
@@ -303,5 +303,16 @@ func process_death(pd):
 	score -= 100
 	$Score.text = str(score)
 	
-func _on_couple_breakup(pd1, pd2):
-	pass
+func post_breakup(pd1, pd2):
+	for pd in [pd1, pd2]:
+		var card = _Card.instance()
+		add_child(card)
+		card.load_person_data(pd)
+		card.connect("card_entered", self, "_card_entered")
+		card.connect("card_exited", self, "_card_exited")
+		card.connect("person_card_quit", self, "_person_card_quit")
+		max_z += 2
+		card.z_index = max_z
+		var x = rng.randi_range(288 + 100, 764 - 100)
+		var y = rng.randi_range(200, 300)
+		card.set_position(Vector2(x, y))

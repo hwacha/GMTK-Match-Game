@@ -15,6 +15,7 @@ onready var update_factory = $UpdateFactory
 func add_couple(pd1, pd2):
 	var new_card = UpdateCard.instance()
 	new_card.connect("card_update_ready", self, "_on_card_update_ready")
+	new_card.connect("card_fadeout_complete", self, "_on_card_fadeout_complete")
 	update_container.add_child(new_card)
 	update_container.move_child(new_card, 0)
 	
@@ -24,9 +25,14 @@ func add_couple(pd1, pd2):
 	new_card.apply_update(match_update)
 
 func _on_card_update_ready(card, update):
-	#print(card.pd1.first_name, card.waiting_for_update)
 	card.apply_update(update)
-	#print(card.pd1.first_name, card.waiting_for_update)
 	update_container.move_child(card, 0)
-	#print(card.pd1.first_name, card.waiting_for_update)
 
+	
+func _on_card_fadeout_complete(card):
+	print('fade_out_complete')
+	print(UpdateData.BROKEN_UP == card.relationship_state.status)
+	if card.relationship_state.status == UpdateData.BROKEN_UP:
+		print('in branch')
+		get_parent().post_breakup(card.pd1, card.pd2)
+	update_container.remove_child(card)

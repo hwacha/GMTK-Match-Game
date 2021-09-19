@@ -1,6 +1,7 @@
 extends Control
 
 signal card_update_ready(card, update)
+signal card_fadeout_complete(card)
 
 const UpdateData = preload("res://scripts/UpdateData.gd")
 const PersonData = preload("res://scripts/PersonData.gd")
@@ -13,12 +14,15 @@ var compatibility = 0
 var update_factory = null
 var field = null
 
-const global_rate = -0.5
+const global_rate = -1
 const update_step = 5
+const fade_out_duration = 5
 const max_name_length = 12
 
 var time_since_update = 0
+var time_since_fadeout_start = 0
 var waiting_for_update = false
+var fading_out = false
 
 onready var sprite1 = $Container/Person1
 onready var sprite2 = $Container/Person2
@@ -62,10 +66,6 @@ func load_couple(_pd1, _pd2):
 func apply_update(update: UpdateData):
 	var value = UpdateData.get_score(update, relationship_state, compatibility)
 	
-	if value < 0:
-		print(value, update.text, update.event_type, relationship_state.event_type)
-	assert(not(update.event_type != 0 and value < 0))
-	
 	field.update_score(value)
 	relationship_state = update
 	status_text.text = "Status: %s" % UpdateData.status_map[update.status]
@@ -78,19 +78,24 @@ func apply_update(update: UpdateData):
 	
 	if update.status != UpdateData.BROKEN_UP and update.status != UpdateData.MARRIED: 
 		waiting_for_update = false
+	else:
+		time_since_fadeout_start = 0
+		fading_out = true
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
 func _process(delta):
-	if pd1:
-		pd1.happiness = clamp(pd1.happiness -  delta * global_rate * pd1.rate, 0, 100)
-		progress_bar1.value = pd1.happiness
-		if pd1.happiness <= 0:
-			pass
-	if pd2:
-		pd2.happiness = clamp(pd2.happiness -  delta * global_rate * pd2.rate, 0, 100)
-		progress_bar2.value = pd2.happiness
-		if pd2.happiness <= 0:
-			pass
+	if relationship_state and relationship_state.status >= UpdateData.DATING_CASUAL and relationship_state.status <= UpdateData.MARRIED:
+		if pd1:
+			pd1.happiness = clamp(pd1.happiness -  delta * global_rate * pd1.rate, 0, 100)
+			progress_bar1.value = pd1.happiness
+			if pd1.happiness <= 0:
+				pass
+		if pd2:
+			pd2.happiness = clamp(pd2.happiness -  delta * global_rate * pd2.rate, 0, 100)
+			progress_bar2.value = pd2.happiness
+			if pd2.happiness <= 0:
+				pass
 	
 	#print(pd1.first_name, waiting_for_update)
 	if not waiting_for_update:
@@ -99,7 +104,12 @@ func _process(delta):
 			time_since_update = 0
 			waiting_for_update = true
 			var update = update_factory.generate_update(pd1, pd2, relationship_state)
-			print('new_update')
 			emit_signal('card_update_ready', self, update)
-
+	
+	if fading_out:
+		time_since_update += delta 
+		if time_since_update >= fade_out_duration:
+			fading_out = false
+			print('faded out complete')
+			emit_signal('card_fadeout_complete', self)
 			
