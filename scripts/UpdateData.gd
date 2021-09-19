@@ -32,10 +32,11 @@ const value_map = {
 	MARRIED: 2500,
 }
 
+const event_mutlipliers = [-1, 1, 2]
 
-static func score_update(next_state, current_state, compatibility=0):
+static func get_score(next_state, current_state, compatibility=0):
 	var multiplier = 0
-	
+
 	if compatibility <= -2:
 		multiplier = 0
 	elif compatibility == -1:
@@ -47,28 +48,32 @@ static func score_update(next_state, current_state, compatibility=0):
 	elif compatibility > 2:
 		multiplier = 4
 	
-	print(next_state, BROKEN_UP)
+	var event_multiplier = event_mutlipliers[next_state.event_type]
 	if next_state.status != BROKEN_UP:
-		return  value_map[next_state.status] * multiplier
+		return value_map[next_state.status] * multiplier * event_multiplier
 	else:
 		if current_state == null:
 			assert(false)
 			return 0
+	
 		return -2 * value_map[current_state.status]
 
 
 var text = ""
 var status = 0
 var count = 0
+var event_type = 1
 
 func _init(
 	_text,
 	_status,
-	_count=0
+	_count=0,
+	_event_type=1
 ):
 	text = _text
 	status = _status
 	count = _count
+	event_type = _event_type
 
 
 

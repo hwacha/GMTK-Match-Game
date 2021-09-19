@@ -1,5 +1,7 @@
 extends ScrollContainer
 
+signal update_score(score_delta)
+
 const UpdateCard = preload("res://prefabs/UpdateCard.tscn")
 const UpdateData = preload("res://scripts/UpdateData.gd")
 
@@ -8,11 +10,9 @@ const match_text = "%s matched with %s!"
 onready var update_container = $UpdateContainer
 onready var update_factory = $UpdateFactory
 
+# this is very sloppy but for now
 
-func _ready():
-	pass # Replace with function body.
-
-func add_couple(pd1, pd2, score_delta):
+func add_couple(pd1, pd2):
 	var new_card = UpdateCard.instance()
 	new_card.connect("card_update_ready", self, "_on_card_update_ready")
 	update_container.add_child(new_card)
@@ -24,9 +24,9 @@ func add_couple(pd1, pd2, score_delta):
 	new_card.apply_update(match_update)
 
 func _on_card_update_ready(card, update):
-	print(card.pd1.first_name, card.waiting_for_update)
+	#print(card.pd1.first_name, card.waiting_for_update)
 	card.apply_update(update)
-	print(card.pd1.first_name, card.waiting_for_update)
+	#print(card.pd1.first_name, card.waiting_for_update)
 	update_container.move_child(card, 0)
-	print(card.pd1.first_name, card.waiting_for_update)
-	
+	#print(card.pd1.first_name, card.waiting_for_update)
+

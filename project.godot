@@ -37,7 +37,8 @@ run/main_scene="res://prefabs/Field.tscn"
 
 [display]
 
-window/size/width=1400
+window/size/width=1152
+window/size/height=738
 
 [importer_defaults]
 

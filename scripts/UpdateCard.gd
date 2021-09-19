@@ -11,6 +11,7 @@ var relationship_state = null
 var compatibility = 0
 
 var update_factory = null
+var field = null
 
 const global_rate = -0.5
 const update_step = 5
@@ -33,6 +34,7 @@ func _ready():
 
 	if get_parent() and get_parent().get_parent():
 		update_factory = get_parent().get_parent().update_factory
+	field = get_tree().get_root().get_node('Field')
 
 func load_couple(_pd1, _pd2):
 	assert(_pd1 and _pd2)
@@ -58,8 +60,13 @@ func load_couple(_pd1, _pd2):
 
 
 func apply_update(update: UpdateData):
-	var value = UpdateData.score_update(update, relationship_state, compatibility)
+	var value = UpdateData.get_score(update, relationship_state, compatibility)
 	
+	if value < 0:
+		print(value, update.text, update.event_type, relationship_state.event_type)
+	assert(not(update.event_type != 0 and value < 0))
+	
+	field.update_score(value)
 	relationship_state = update
 	status_text.text = "Status: %s" % UpdateData.status_map[update.status]
 	update_text.text = update.text

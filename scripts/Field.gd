@@ -13,6 +13,7 @@ var target_direction = null
 
 var in_pairzone = false
 var score = 0
+var lives = 10
 
 onready var _card_view = get_node("PersonViewer")
 onready var _pair_view = get_node("PairViewer")
@@ -28,11 +29,11 @@ var graveyard = []
 func _ready():
 	rng.randomize()
 	
-	var num_cards = 10
+	var num_cards = 4
 	for n in range(num_cards):
 		add_card_to_field()
 
-	var num_reservoir = 6
+	var num_reservoir = 10
 	for n in range(num_reservoir):
 		add_card_to_reservoir()
 
@@ -53,8 +54,8 @@ func add_card_to_field():
 	
 	_finish_add_card(card)
 
-	var x = rng.randi_range(275, 680)
-	var y = rng.randi_range(100, 500)
+	var x = rng.randi_range(288 + 100, 764 - 100)
+	var y = rng.randi_range(100, 300)
 	card.set_position(Vector2(x, y))
 
 func add_card_to_reservoir():
@@ -236,13 +237,8 @@ func submit_pair():
 	
 	var pd1 = pair_container.selected.person_data
 	var pd2 = pair_container.target.person_data
-	var compatibility = PersonData.score_compatibility(pd1, pd2)
 	
-	var score_delta = 10 * (compatibility + 4) * (compatibility + 4)
-	$UpdateFeed.add_couple(pd1, pd2, score_delta)
-	score +=  score_delta
-
-	$Score.text = str(score) 
+	$UpdateFeed.add_couple(pd1, pd2)
 	pair_container.queue_free()
 	
 
@@ -298,6 +294,10 @@ func _person_card_quit(card):
 		Card.PairState.UNPAIRED:
 			self.remove_child(card)
 	
+
+func update_score(value):
+	score += value
+	$Score.text = str(score)
 
 func process_death(pd):
 	score -= 100

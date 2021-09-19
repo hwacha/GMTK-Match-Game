@@ -7,10 +7,14 @@ var rng = RandomNumberGenerator.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	#print(Event.BAD == 0)
+	#print(Event.NEUTRAL == 1)
+	#print(Event.GOOD == 2)
 	rng.randomize()
 
 ## SIMULATION CODE
 enum Event {BAD, NEUTRAL, GOOD}
+
 const base_event_distribution = [0.2, 0.4, 0.4]
 # probability of update being BAD, NEUTRAL, GOOD
 const event_likelihoods = {
@@ -82,7 +86,7 @@ func generate_update(pd1, pd2, relationship):
 	
 	assert(false)
 
-	return UpdateData.new("DEBUG UPDATE %s" % str(rng.randi_range(0, 100)), UpdateData.MARRIED, 0)
+	return UpdateData.new("DEBUG UPDATE %s" % str(rng.randi_range(0, 100)), UpdateData.MARRIED, 0, 1)
 
 
 ## TALKING
@@ -315,7 +319,7 @@ func get_update(p1, p2, relationship, outcome, transition):
 			if relationship.status != UpdateData.MATCHED:
 				var text_template = choose(good_transition_text[relationship.status])
 				var text = text_template % [p1.first_name, p2.first_name, p2.first_name]
-				return UpdateData.new(text, good_transition_next[relationship.status], 0)
+				return UpdateData.new(text, good_transition_next[relationship.status], 0, outcome)
 		elif outcome == Event.BAD:
 			var meta_template = choose(bad_transition_text[relationship.status])
 			var template = meta_template[0]
@@ -324,15 +328,15 @@ func get_update(p1, p2, relationship, outcome, transition):
 				var next_word = choose(meta_template[i])
 				template_parameters.append(next_word)
 			var text = template % template_parameters
-			return UpdateData.new(text, UpdateData.BROKEN_UP, 0)
+			return UpdateData.new(text, UpdateData.BROKEN_UP, 0, outcome)
 	var activity = choose(activity_map[relationship.status])
 	if activity == Activities.TEXT:
 		var text = get_talking_text(p1, p2, outcome)
-		return UpdateData.new(text, UpdateData.TALKING, relationship.count + 1)
+		return UpdateData.new(text, UpdateData.TALKING, relationship.count + 1, outcome)
 	else:
 		var meta_template = choose(activity_templates[activity])
 		var template = meta_template[0]
-		var good_bad = choose(meta_template[len(meta_template) - 1])
+		var good_bad = meta_template[len(meta_template) - 1][outcome]
 		var template_parameters = [p1.first_name, p2.first_name]
 		for i in range(1, len(meta_template) - 1):
 			var next_word = choose(meta_template[i])
@@ -344,7 +348,7 @@ func get_update(p1, p2, relationship, outcome, transition):
 		if relationship.status == UpdateData.MATCHED and outcome == Event.GOOD:
 			next_status = UpdateData.TALKING
 			next_count = 0
-		return UpdateData.new(text, next_status, next_count)
+		return UpdateData.new(text, next_status, next_count, outcome)
 
 
 # TODO: make the endings templates themselves
