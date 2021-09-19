@@ -6,6 +6,9 @@ const PersonConstants = preload("res://scripts/PersonConstants.gd")
 var male_sprite_array = []
 var female_sprite_array = []
 
+var remaining_male_sprites = []
+var remaining_female_sprites = []
+
 const male_name_array = PersonConstants.male_names
 const female_name_array =  PersonConstants.female_names
 
@@ -29,6 +32,12 @@ func _ready():
 	for face_id in range(1, PersonConstants.num_female_faces + 1):
 		var path = "res://assets/faces_v4/women/%s.png" % face_id
 		female_sprite_array.append(load(path))
+	
+	randomize()
+	remaining_male_sprites = male_sprite_array.duplicate()
+	remaining_male_sprites.shuffle()
+	remaining_female_sprites = female_sprite_array.duplicate()
+	remaining_female_sprites.shuffle()
 
 	rng.randomize()
 	
@@ -86,10 +95,18 @@ func new_person_data():
 	var first_name = null
 	match gender:
 		'male':
-			face_id = male_sprite_array[rng.randi_range(0, len(male_sprite_array) - 1)]
+			if len(remaining_male_sprites) <= 0:
+				randomize()
+				remaining_male_sprites = male_sprite_array.duplicate()
+				remaining_male_sprites.shuffle()
+			face_id = remaining_male_sprites.pop_front()
 			first_name = male_name_array[rng.randi_range(0, len(male_name_array) - 1)]
 		'female':
-			face_id = female_sprite_array[rng.randi_range(0, len(female_sprite_array) - 1)]
+			if len(remaining_female_sprites) <= 0:
+				randomize()
+				remaining_female_sprites = female_sprite_array.duplicate()
+				remaining_female_sprites.shuffle()
+			face_id = remaining_female_sprites.pop_front()
 			first_name = female_name_array[rng.randi_range(0, len(female_name_array) - 1)]
 	
 	var bio = PersonConstants.bios[rng.randi_range(0, len(PersonConstants.bios) - 1)]
